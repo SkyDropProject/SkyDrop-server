@@ -1,5 +1,6 @@
 import { DAOFactory } from './DAOFactory';
 import { ProductMongoDAO } from './ProductMongoDAO';
+import { UserMongoDAO } from './UserMongoDAO';
 
 class DAOMongoFactory extends DAOFactory {
   constructor() {
@@ -8,6 +9,10 @@ class DAOMongoFactory extends DAOFactory {
 
   createProductDAO(): ProductMongoDAO {
     return new ProductMongoDAO();
+  }
+
+  createUserDAO(): UserMongoDAO {
+    return new UserMongoDAO();
   }
 }
 
