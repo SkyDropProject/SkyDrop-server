@@ -1,5 +1,5 @@
 type functionsMongoType = {
-    [key: string] : Function
+  [key: string]: Function;
 };
 
-export {functionsMongoType}
+export { functionsMongoType };

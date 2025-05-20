@@ -1,4 +1,4 @@
-import { configType } from "../types/config";
+import { configType } from '../types/config';
 
 const config: configType = {
   PORT: 3001,
