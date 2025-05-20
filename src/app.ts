@@ -5,11 +5,12 @@ import { mongoConnection } from './utils/mongoConnection';
 import { DAOMongoFactory } from './DAO/DAOMongoFactory';
 import { ProductController } from './controllers/ProductController';
 import { ProductRouter } from './routers/ProductRouter';
+import { UserController } from './controllers/UserController';
+import { UserRouter } from './routers/UserRouter';
 
 const app = express();
 const PORT = config.PORT;
 
-// BDD CONNECTION
 (async () => {
   let bddConnected: boolean = false;
   while (!bddConnected) {
@@ -22,17 +23,13 @@ const PORT = config.PORT;
     }
   }
 
-  // FACTORIES
-
   const factory = new DAOMongoFactory();
 
   const productController = new ProductController(factory);
-
-  // ROUTE INITIALIZATION
+  const userController = new UserController(factory);
 
   app.use('/product', new ProductRouter(productController).router);
-
-  // SERVER INITIALIZATION
+  app.use('/user', new UserRouter(userController).router);
 
   const server = http.createServer(app);
   server.setTimeout(24 * 3600 * 1000);
