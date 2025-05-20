@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { config } from './utils/config';
 import http from 'http';
 import { mongoConnection } from './utils/mongoConnection';
@@ -13,13 +13,13 @@ const PORT = config.PORT;
     try {
       await mongoConnection();
       bddConnected = true;
-    } catch (err) {
+    } catch (err: any) {
       console.log('BDD CONNECTION ERROR : ', err);
       bddConnected = false;
     }
   }
 
-  app.get('/', (req, res) => {
+  app.get('/', (req: Request, res: Response) => {
     res.send('Hello from TypeScript server!');
   });
 
