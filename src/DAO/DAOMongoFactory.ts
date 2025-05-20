@@ -6,7 +6,7 @@ class DAOMongoFactory extends DAOFactory {
     super();
   }
 
-  createProductDAO():ProductMongoDAO {
+  createProductDAO(): ProductMongoDAO {
     return new ProductMongoDAO();
   }
 }
