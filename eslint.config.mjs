@@ -25,6 +25,15 @@ export default defineConfig([
       ...js.configs.recommended.rules,
       ...tseslint.configs.recommended.rules,
       'prettier/prettier': 'error',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
     },
   },
 
