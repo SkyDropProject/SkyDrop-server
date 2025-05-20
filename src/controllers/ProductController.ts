@@ -11,14 +11,6 @@ class ProductController {
     res.sendStatus(200);
   }
 
-  async createAccount(req: Request, res: Response) {
-    res.sendStatus(200);
-  }
-
-  async login(req: Request, res: Response) {
-    res.sendStatus(200);
-  }
-
   async update(req: Request, res: Response) {
     res.sendStatus(200);
   }
