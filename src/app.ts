@@ -7,6 +7,8 @@ import { ProductController } from './controllers/ProductController';
 import { ProductRouter } from './routers/ProductRouter';
 import { UserController } from './controllers/UserController';
 import { UserRouter } from './routers/UserRouter';
+import { OrderController } from './controllers/OrderController';
+import { OrderRouter } from './routers/OrderRouter';
 
 const app = express();
 const PORT = config.PORT;
@@ -27,9 +29,11 @@ const PORT = config.PORT;
 
   const productController = new ProductController(factory);
   const userController = new UserController(factory);
+  const orderController = new OrderController(factory);
 
   app.use('/product', new ProductRouter(productController).router);
   app.use('/user', new UserRouter(userController).router);
+  app.use('/order', new OrderRouter(orderController).router);
 
   const server = http.createServer(app);
   server.setTimeout(24 * 3600 * 1000);
