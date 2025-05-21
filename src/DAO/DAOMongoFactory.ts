@@ -1,3 +1,4 @@
+import { CategoryMongoDAO } from './CategoryMongoDAO';
 import { DAOFactory } from './DAOFactory';
 import { DroneMongoDAO } from './DroneMongoDAO';
 import { OrderMongoDAO } from './OrderMongoDAO';
@@ -23,6 +24,10 @@ class DAOMongoFactory extends DAOFactory {
 
   createOrderDAO(): OrderMongoDAO {
     return new OrderMongoDAO();
+  }
+
+  createCategoryDAO(): CategoryMongoDAO {
+    return new CategoryMongoDAO();
   }
 }
 

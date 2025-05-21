@@ -2,9 +2,11 @@ import { Request, Response } from 'express';
 
 class ProductController {
   factory: any;
+  categoryFactory: any;
 
   constructor(factory: any) {
     this.factory = factory.createProductDAO();
+    this.categoryFactory = factory.createCategoryDAO();
   }
 
   async insert(req: Request, res: Response) {

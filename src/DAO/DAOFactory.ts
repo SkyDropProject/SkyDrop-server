@@ -6,6 +6,8 @@ abstract class DAOFactory {
   abstract createDroneDAO(): any;
 
   abstract createOrderDAO(): any;
+
+  abstract createCategoryDAO(): any;
 }
 
 export { DAOFactory };
