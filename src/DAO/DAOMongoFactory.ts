@@ -1,3 +1,4 @@
+import { CategoryMongoDAO } from './CategoryMongoDAO';
 import { DAOFactory } from './DAOFactory';
 import { ProductMongoDAO } from './ProductMongoDAO';
 import { UserMongoDAO } from './UserMongoDAO';
@@ -13,6 +14,10 @@ class DAOMongoFactory extends DAOFactory {
 
   createUserDAO(): UserMongoDAO {
     return new UserMongoDAO();
+  }
+
+  createCategoryDAO(): CategoryMongoDAO {
+    return new CategoryMongoDAO();
   }
 }
 
