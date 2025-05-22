@@ -28,6 +28,14 @@ class UserRouter {
       .delete(auth, async (req: Request, res: Response) => {
         await userController.delete(req, res);
       });
+
+    this.router.route('/login').post(auth, async (req: Request, res: Response) => {
+      await userController.login(req, res);
+    });
+
+    this.router.route('/register').post(auth, async (req: Request, res: Response) => {
+      await userController.register(req, res);
+    });
   }
 }
 
