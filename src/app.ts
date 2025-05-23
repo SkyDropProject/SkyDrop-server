@@ -9,6 +9,8 @@ import { UserController } from './controllers/UserController';
 import { UserRouter } from './routers/UserRouter';
 import { OrderController } from './controllers/OrderController';
 import { OrderRouter } from './routers/OrderRouter';
+import { CategoryController } from './controllers/CategoryController';
+import { CategoryRouter } from './routers/CategoryRouter';
 
 const app = express();
 const PORT = config.PORT;
@@ -30,10 +32,12 @@ const PORT = config.PORT;
   const productController = new ProductController(factory);
   const userController = new UserController(factory);
   const orderController = new OrderController(factory);
+  const categoryController = new CategoryController(factory);
 
   app.use('/product', new ProductRouter(productController).router);
   app.use('/user', new UserRouter(userController).router);
   app.use('/order', new OrderRouter(orderController).router);
+  app.use('/category', new CategoryRouter(categoryController).router);
 
   const server = http.createServer(app);
   server.setTimeout(24 * 3600 * 1000);
