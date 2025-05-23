@@ -10,32 +10,34 @@ class UserRouter {
 
     this.router
       .route('/')
-      .get(auth, async (req: Request, res: Response) => {
+      .get(auth.authenticate(), async (req: Request, res: Response) => {
         await userController.find(req, res);
       })
-      .put(auth, async (req: Request, res: Response) => {
-        await userController.insert(req, res);
+      .put(async (req: Request, res: Response) => {
+        await userController.register(req, res);
       })
-      .post(auth, async (req: Request, res: Response) => {
+      .post(auth.authenticate(), async (req: Request, res: Response) => {
         await userController.update(req, res);
       });
 
     this.router
       .route('/:id')
-      .get(auth, async (req: Request, res: Response) => {
+      .get(auth.authenticate(), async (req: Request, res: Response) => {
         await userController.findOne(req, res);
       })
-      .delete(auth, async (req: Request, res: Response) => {
+      .delete(auth.authenticate(), async (req: Request, res: Response) => {
         await userController.delete(req, res);
       });
 
-    this.router.route('/login').post(auth, async (req: Request, res: Response) => {
+    this.router.route('/login').post(async (req: Request, res: Response) => {
       await userController.login(req, res);
     });
 
-    this.router.route('/register').post(auth, async (req: Request, res: Response) => {
-      await userController.register(req, res);
-    });
+    this.router
+      .route('/verifiy-account')
+      .post(auth.authenticate(), async (req: Request, res: Response) => {
+        await userController.verifyAccount(req, res);
+      });
   }
 }
 

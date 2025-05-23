@@ -3,8 +3,10 @@ interface UserType {
   email: string;
   password: string;
   firstName: string;
+  birthdate: Date;
   registrationDate: Date;
   verificationDate?: Date;
+  verificationToken?: string;
   lastName: string;
   address: string;
   zip: string;

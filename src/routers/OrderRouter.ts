@@ -10,22 +10,22 @@ class OrderRouter {
 
     this.router
       .route('/')
-      .get(auth, async (req: Request, res: Response) => {
+      .get(auth.authenticate(), async (req: Request, res: Response) => {
         await orderController.find(req, res);
       })
-      .put(auth, async (req: Request, res: Response) => {
+      .put(auth.authenticate(), async (req: Request, res: Response) => {
         await orderController.insert(req, res);
       })
-      .post(auth, async (req: Request, res: Response) => {
+      .post(auth.authenticate(), async (req: Request, res: Response) => {
         await orderController.update(req, res);
       });
 
     this.router
       .route('/:id')
-      .get(auth, async (req: Request, res: Response) => {
+      .get(auth.authenticate(), async (req: Request, res: Response) => {
         await orderController.findOne(req, res);
       })
-      .delete(auth, async (req: Request, res: Response) => {
+      .delete(auth.authenticate(), async (req: Request, res: Response) => {
         await orderController.delete(req, res);
       });
   }

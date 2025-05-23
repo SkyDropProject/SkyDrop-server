@@ -10,22 +10,22 @@ class ProductRouter {
 
     this.router
       .route('/')
-      .get(auth, async (req: Request, res: Response) => {
+      .get(auth.authenticate(), async (req: Request, res: Response) => {
         await productController.find(req, res);
       })
-      .put(auth, async (req: Request, res: Response) => {
+      .put(auth.authenticate(), async (req: Request, res: Response) => {
         await productController.insert(req, res);
       })
-      .post(auth, async (req: Request, res: Response) => {
+      .post(auth.authenticate(), async (req: Request, res: Response) => {
         await productController.update(req, res);
       });
 
     this.router
       .route('/:id')
-      .get(auth, async (req: Request, res: Response) => {
+      .get(auth.authenticate(), async (req: Request, res: Response) => {
         await productController.findOne(req, res);
       })
-      .delete(auth, async (req: Request, res: Response) => {
+      .delete(auth.authenticate(), async (req: Request, res: Response) => {
         await productController.delete(req, res);
       });
   }

@@ -5,8 +5,10 @@ const userSchema = new mongoose.Schema<UserType>({
   email: String,
   password: String,
   firstName: String,
+  birthdate: Date,
   registrationDate: Date,
   verificationDate: Date,
+  verificationToken: String,
   lastName: String,
   address: String,
   zip: String,
@@ -18,6 +20,6 @@ const userSchema = new mongoose.Schema<UserType>({
   favoriteProductsId: Array<String>,
 });
 
-let User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
 
 export { User };
