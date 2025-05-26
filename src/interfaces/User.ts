@@ -16,6 +16,7 @@ interface UserType {
   token?: string;
   stripeId?: string;
   favoriteProductsId: Array<string>;
+  cartId: Array<string>;
 }
 
 export { UserType };

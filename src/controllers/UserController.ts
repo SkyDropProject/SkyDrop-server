@@ -97,9 +97,7 @@ class UserController {
           return;
         }
 
-        const saltRounds = 10;
-
-        bcrypt.hash(password, saltRounds, async (err, hash) => {
+        bcrypt.hash(password, config.saltRounds, async (err, hash) => {
           if (err) {
             res.sendStatus(500);
             return;
@@ -121,6 +119,8 @@ class UserController {
               registrationDate: new Date(),
               phone: req.body.phone,
               birthdate: req.body.birthdate,
+              cartId: [],
+              favoriteProductsId: [],
             });
 
             this.generateToken(newUser._id, (err, token) => {
@@ -177,19 +177,335 @@ class UserController {
   }
 
   async update(req: Request, res: Response) {
-    res.sendStatus(200);
+    if (!req.body._id) {
+      res.sendStatus(500);
+      return;
+    }
+
+    let email: string;
+    if (req.body.email) email = req.body.email.trim();
+
+    this.factory
+      .findOne({ _id: req.body._id })
+      .then((user: any) => {
+        this.factory
+          .update(user._id, {
+            email: email,
+            firstName: req.body.firstName,
+            birthdate: req.body.birthdate,
+            lastName: req.body.lastName,
+            address: req.body.address,
+            zip: req.body.zip,
+            city: req.body.city,
+            phone: req.body.phone,
+          })
+          .then((res: any) => {
+            res.json(res);
+          })
+          .catch((err: any) => {
+            console.log(err);
+            res.sendStatus(500);
+            return;
+          });
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      });
+  }
+
+  async updatePassword(req: Request, res: Response) {
+    if (!req.body._id && !req.body.password && !req.body.newPassword) {
+      res.sendStatus(500);
+      return;
+    }
+
+    this.factory
+      .findOne({ _id: req.body._id })
+      .then((user: any) => {
+        bcrypt.compare(req.body.password, user.password, (err, match) => {
+          if (err) {
+            res.sendStatus(500);
+            return;
+          }
+
+          if (!match) {
+            res.sendStatus(401);
+            return;
+          }
+
+          bcrypt.hash(req.body.newPassword, config.saltRounds, async (err, hash) => {
+            if (err) {
+              res.sendStatus(500);
+              return;
+            }
+
+            this.factory
+              .update(user._id, { password: hash })
+              .then((newUser: any) => {
+                res.json(newUser);
+              })
+              .catch((err: any) => {
+                console.log(err);
+                res.sendStatus(500);
+                return;
+              });
+          });
+        });
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      });
   }
 
   async delete(req: Request, res: Response) {
-    res.sendStatus(200);
+    if (!req.body._id) {
+      res.sendStatus(500);
+      return;
+    }
+
+    this.factory
+      .findOne({ _id: req.body._id })
+      .then(() => {
+        this.factory
+          .delete(req.body._id)
+          .then((res: any) => {
+            res.json(res);
+          })
+          .catch((err: any) => {
+            console.log(err);
+            res.sendStatus(500);
+            return;
+          });
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      });
   }
 
   async find(req: Request, res: Response) {
-    res.sendStatus(200);
+    this.factory
+      .find({})
+      .then((users: Array<any>) => {
+        res.json(users);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      });
   }
 
   async findOne(req: Request, res: Response) {
-    res.sendStatus(200);
+    if (!req.params._id) {
+      res.sendStatus(500);
+      return;
+    }
+
+    this.factory
+      .findOne({ _id: req.params._id })
+      .then((user: any) => {
+        res.json(user);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      });
+  }
+
+  async addToCart(req: Request, res: Response) {
+    if (!req.body._id || !req.body.productId) {
+      res.sendStatus(500);
+      return;
+    }
+
+    this.factory
+      .findOne({ _id: req.body._id })
+      .then((user: any) => {
+        let cartTmp = [];
+        for (let product of user.cartId) {
+          cartTmp.push(product._id);
+        }
+        cartTmp.push(req.body.productId);
+
+        this.factory
+          .update(user._id, {
+            cartId: cartTmp,
+          })
+          .then((res: any) => {
+            res.json(res);
+          })
+          .catch((err: any) => {
+            console.log(err);
+            res.sendStatus(500);
+            return;
+          });
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      });
+  }
+
+  async viewCart(req: Request, res: Response) {
+    if (!req.body._id) {
+      res.sendStatus(500);
+      return;
+    }
+
+    this.factory
+      .findOne({ _id: req.body._id })
+      .then((user: any) => {
+        res.json(user.cartId);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      });
+  }
+
+  async deleteFromCart(req: Request, res: Response) {
+    if (!req.body._id || !req.body.productId) {
+      res.sendStatus(500);
+      return;
+    }
+
+    this.factory
+      .findOne({ _id: req.body._id })
+      .then((user: any) => {
+        let product = user.cartId.find((p: any) => p._id === req.body.productId);
+        if (!product) {
+          res.sendStatus(500);
+          return;
+        }
+
+        let cartTmp = [];
+        let deleted = false;
+        for (let i = user.cartId.length - 1; i >= 0; i--) {
+          let product = user.cartId[i];
+          if (product._id !== req.body.productId || deleted) cartTmp.push(product._id);
+          else deleted = true;
+        }
+
+        this.factory
+          .update(user._id, {
+            cartId: cartTmp,
+          })
+          .then((res: any) => {
+            res.json(res);
+          })
+          .catch((err: any) => {
+            console.log(err);
+            res.sendStatus(500);
+            return;
+          });
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      });
+  }
+
+  async addToFavorites(req: Request, res: Response) {
+    if (!req.body._id || !req.body.productId) {
+      res.sendStatus(500);
+      return;
+    }
+
+    this.factory
+      .findOne({ _id: req.body._id })
+      .then((user: any) => {
+        let favoritesTmp = [];
+        for (let product of user.favoriteProductsId) {
+          favoritesTmp.push(product._id);
+        }
+        favoritesTmp.push(req.body.productId);
+
+        this.factory
+          .update(user._id, {
+            favoriteProductsId: favoritesTmp,
+          })
+          .then((res: any) => {
+            res.json(res);
+          })
+          .catch((err: any) => {
+            console.log(err);
+            res.sendStatus(500);
+            return;
+          });
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      });
+  }
+
+  async viewFavorites(req: Request, res: Response) {
+    if (!req.body._id) {
+      res.sendStatus(500);
+      return;
+    }
+
+    this.factory
+      .findOne({ _id: req.body._id })
+      .then((user: any) => {
+        res.json(user.favoriteProductsId);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      });
+  }
+
+  async deleteFromFavorites(req: Request, res: Response) {
+    if (!req.body._id || !req.body.productId) {
+      res.sendStatus(500);
+      return;
+    }
+
+    this.factory
+      .findOne({ _id: req.body._id })
+      .then((user: any) => {
+        let product = user.favoriteProductsId.find((p: any) => p._id === req.body.productId);
+        if (!product) {
+          res.sendStatus(500);
+          return;
+        }
+
+        let favoriteTmp = [];
+        for (let product of user.favoriteProductsId) {
+          if (product._id !== req.body.productId) favoriteTmp.push(product._id);
+        }
+
+        this.factory
+          .update(user._id, {
+            favoriteProductsId: favoriteTmp,
+          })
+          .then((res: any) => {
+            res.json(res);
+          })
+          .catch((err: any) => {
+            console.log(err);
+            res.sendStatus(500);
+            return;
+          });
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      });
   }
 }
 

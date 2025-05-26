@@ -49,7 +49,7 @@ class UserMongoDAO extends UserDAO {
   async find(object: object): Promise<Array<typeof User>> {
     return new Promise((resolve, reject) => {
       functionsMongo
-        .find(User, object, null, null)
+        .find(User, object, [{ path: 'favoriteProductsId' }, { path: 'cartId' }], null)
         .then((res: Array<typeof User>) => {
           resolve(res);
         })

@@ -17,7 +17,18 @@ const userSchema = new mongoose.Schema<UserType>({
   accountType: String,
   token: String,
   stripeId: String,
-  favoriteProductsId: Array<String>,
+  favoriteProductsId: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
+    },
+  ],
+  cartId: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
+    },
+  ],
 });
 
 const User = mongoose.model('User', userSchema);

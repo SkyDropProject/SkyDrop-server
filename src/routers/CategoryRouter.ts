@@ -8,7 +8,7 @@ class CategoryRouter {
   constructor(categoryController: CategoryController) {
     this.router = express.Router();
 
-    this.router.route('/').get(auth, async (req: Request, res: Response) => {
+    this.router.route('/').get(auth.authenticate(), async (req: Request, res: Response) => {
       await categoryController.find(req, res);
     });
   }
