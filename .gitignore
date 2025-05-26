@@ -12,7 +12,7 @@ dist
 dist-ssr
 *.local
 
-/src/utils/config.ts
+src/utils/config.ts
 
 # Editor directories and files
 .vscode/*
