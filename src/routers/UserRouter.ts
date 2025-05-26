@@ -34,7 +34,7 @@ class UserRouter {
     });
 
     this.router
-      .route('/verifiy-account')
+      .route('/verify-account')
       .post(auth.authenticate(), async (req: Request, res: Response) => {
         await userController.verifyAccount(req, res);
       });
