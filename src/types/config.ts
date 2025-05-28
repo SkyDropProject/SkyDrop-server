@@ -5,6 +5,7 @@ type configType = {
   jwtSession: {
     session: boolean;
   };
+  saltRounds: number;
 };
 
 export { configType };

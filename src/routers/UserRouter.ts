@@ -21,7 +21,7 @@ class UserRouter {
       });
 
     this.router
-      .route('/:id')
+      .route('/userSingle/:id')
       .get(auth.authenticate(), async (req: Request, res: Response) => {
         await userController.findOne(req, res);
       })
@@ -37,6 +37,30 @@ class UserRouter {
       .route('/verify-account')
       .post(auth.authenticate(), async (req: Request, res: Response) => {
         await userController.verifyAccount(req, res);
+      });
+
+    this.router
+      .route('/cart')
+      .get(auth.authenticate(), async (req: Request, res: Response) => {
+        await userController.viewCart(req, res);
+      })
+      .post(auth.authenticate(), async (req: Request, res: Response) => {
+        await userController.deleteFromCart(req, res);
+      })
+      .put(auth.authenticate(), async (req: Request, res: Response) => {
+        await userController.addToCart(req, res);
+      });
+
+    this.router
+      .route('/favorites')
+      .get(auth.authenticate(), async (req: Request, res: Response) => {
+        await userController.viewFavorites(req, res);
+      })
+      .post(auth.authenticate(), async (req: Request, res: Response) => {
+        await userController.deleteFromFavorites(req, res);
+      })
+      .put(auth.authenticate(), async (req: Request, res: Response) => {
+        await userController.addToFavorites(req, res);
       });
   }
 }
