@@ -1,0 +1,25 @@
+meta {
+  name: CREATE
+  type: http
+  seq: 2
+}
+
+put {
+  url: http://localhost:3001/product
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  image: @file(/Users/hugocrepin/Downloads/hugo-crepin.png)
+  name: Coca-cola
+  weight: 2
+  price: 2.5
+  description: apagnant
+  stock: 25
+  categoryId: 68418f9a8ada91dd9321bb14
+}
+
+body:file {
+  ~file: @file()
+}
