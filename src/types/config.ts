@@ -6,6 +6,7 @@ type configType = {
     session: boolean;
   };
   saltRounds: number;
+  uploadPath:string;
 };
 
 export { configType };
