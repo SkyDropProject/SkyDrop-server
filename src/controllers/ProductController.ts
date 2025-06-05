@@ -31,7 +31,11 @@ class ProductController {
         description: req.body.description,
         stock: req.body.stock,
         weight: req.body.weight,
+<<<<<<< HEAD
         star: !!req.body.star,
+=======
+        star: req.body.star ? true : false,
+>>>>>>> b1317d5 (fix(#40): Put /user)
         categoryId: req.body.categoryId,
       });
 
@@ -59,20 +63,33 @@ class ProductController {
     }
 
     try {
+<<<<<<< HEAD
       this.factory.findOne({ _id: req.body._id }).then(async (result: any) => {
         if (!result) {
+=======
+      this.factory.findOne({ _id: req.body._id }).then(async (res: any) => {
+        if (!res) {
+>>>>>>> b1317d5 (fix(#40): Put /user)
           res.sendStatus(500);
           return;
         }
 
+<<<<<<< HEAD
         let product = await this.factory.update(req.body._id, {
+=======
+        let product = await this.factory.update(res._id, {
+>>>>>>> b1317d5 (fix(#40): Put /user)
           name: req.body.name,
           imageUrl: req.file ? req.file.filename : req.body.imageUrl,
           price: req.body.price,
           description: req.body.description,
           stock: req.body.stock,
           weight: req.body.weight,
+<<<<<<< HEAD
           star: !!req.body.star,
+=======
+          star: req.body.star ? true : false,
+>>>>>>> b1317d5 (fix(#40): Put /user)
           categoryId: req.body.categoryId,
         });
 
@@ -92,13 +109,22 @@ class ProductController {
     }
 
     try {
+<<<<<<< HEAD
       this.factory.findOne({ _id: req.params._id }).then(async (result: any) => {
         if (!result) {
+=======
+      this.factory.findOne({ _id: req.params._id }).then(async (res: any) => {
+        if (!res) {
+>>>>>>> b1317d5 (fix(#40): Put /user)
           res.sendStatus(500);
           return;
         }
 
+<<<<<<< HEAD
         let product = await this.factory.delete(req.params._id);
+=======
+        let product = await this.factory.delete(res._id);
+>>>>>>> b1317d5 (fix(#40): Put /user)
 
         res.json(product);
       });
@@ -111,13 +137,22 @@ class ProductController {
 
   async find(req: Request, res: Response) {
     try {
+<<<<<<< HEAD
       this.factory.find({}).then(async (result: any) => {
         if (!result) {
+=======
+      this.factory.find({}).then(async (res: any) => {
+        if (!res) {
+>>>>>>> b1317d5 (fix(#40): Put /user)
           res.sendStatus(500);
           return;
         }
 
+<<<<<<< HEAD
         res.json(result);
+=======
+        res.json(res);
+>>>>>>> b1317d5 (fix(#40): Put /user)
       });
     } catch (err: any) {
       console.log(err);
@@ -128,13 +163,22 @@ class ProductController {
 
   async getStar(req: Request, res: Response) {
     try {
+<<<<<<< HEAD
       this.factory.find({ star: true }).then(async (result: any) => {
         if (!result) {
+=======
+      this.factory.find({ star: true }).then(async (res: any) => {
+        if (!res) {
+>>>>>>> b1317d5 (fix(#40): Put /user)
           res.sendStatus(500);
           return;
         }
 
+<<<<<<< HEAD
         res.json(result);
+=======
+        res.json(res);
+>>>>>>> b1317d5 (fix(#40): Put /user)
       });
     } catch (err: any) {
       console.log(err);
@@ -144,19 +188,32 @@ class ProductController {
   }
 
   async findOne(req: Request, res: Response) {
+<<<<<<< HEAD
     if (!req.params.id) {
+=======
+    if (!req.params._id) {
+>>>>>>> b1317d5 (fix(#40): Put /user)
       res.sendStatus(500);
       return;
     }
 
     try {
+<<<<<<< HEAD
       this.factory.findOne({ _id: req.params.id }).then(async (result: any) => {
         if (!result) {
+=======
+      this.factory.findOne({ _id: req.params._id }).then(async (res: any) => {
+        if (!res) {
+>>>>>>> b1317d5 (fix(#40): Put /user)
           res.sendStatus(500);
           return;
         }
 
+<<<<<<< HEAD
         res.json(result);
+=======
+        res.json(res);
+>>>>>>> b1317d5 (fix(#40): Put /user)
       });
     } catch (err: any) {
       console.log(err);

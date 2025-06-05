@@ -11,8 +11,8 @@ class UserMongoDAO extends UserDAO {
     return new Promise((resolve, reject) => {
       functionsMongo
         .insert(User, object)
-        .then(() => {
-          resolve(object);
+        .then((res: typeof User) => {
+          resolve(res);
         })
         .catch((err: any) => {
           reject(err);

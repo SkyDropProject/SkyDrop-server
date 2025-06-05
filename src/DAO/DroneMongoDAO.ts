@@ -11,8 +11,8 @@ class DroneMongoDAO extends DroneDAO {
     return new Promise((resolve, reject) => {
       functionsMongo
         .insert(Drone, object)
-        .then(() => {
-          resolve(object);
+        .then((res: typeof Drone) => {
+          resolve(res);
         })
         .catch((err: any) => {
           reject(err);
