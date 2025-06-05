@@ -11,8 +11,15 @@ import { OrderController } from './controllers/OrderController';
 import { OrderRouter } from './routers/OrderRouter';
 import { CategoryController } from './controllers/CategoryController';
 import { CategoryRouter } from './routers/CategoryRouter';
+import cors from 'cors';
 
 const app = express();
+app.use(
+  cors({
+    origin: ['http://localhost:8081', 'http://localhost:5173'],
+    credentials: true,
+  })
+);
 const PORT = config.PORT;
 
 (async () => {
