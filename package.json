@@ -15,7 +15,7 @@
   "type": "commonjs",
   "main": "app.ts",
   "scripts": {
-    "start": "ts-node-dev src/app.ts",
+    "start": "node dist/app.js",
     "dev": "ts-node-dev src/app.ts",
     "build": "tsc",
     "lint": "eslint . --ext .ts",

@@ -8,6 +8,6 @@ const droneSchema = new mongoose.Schema<DroneType>({
   coordinates: coordinatesSchema,
 });
 
-let Drone = mongoose.model('Drone', droneSchema);
+const Drone = mongoose.model('Drone', droneSchema);
 
 export { Drone };

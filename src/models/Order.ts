@@ -23,6 +23,6 @@ const orderSchema = new mongoose.Schema<OrderType>({
   price: Number,
 });
 
-let Order = mongoose.model('Order', orderSchema);
+const Order = mongoose.model('Order', orderSchema);
 
 export { Order };
