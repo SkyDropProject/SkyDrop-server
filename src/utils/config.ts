@@ -9,7 +9,7 @@ const config: configType = {
     session: false,
   },
   saltRounds: 10,
-  uploadPath: '/public/uploads',
+  uploadPath: 'public/uploads',
 };
 
 export { config };
