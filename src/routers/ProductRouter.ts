@@ -29,10 +29,10 @@ class ProductRouter {
       .get(auth.authenticate(), async (req: Request, res: Response) => {
         await productController.find(req, res);
       })
-      .put(auth.authenticate(), upload.single("image"), async (req: Request, res: Response) => {
+      .put(auth.authenticate(), upload.single('image'), async (req: Request, res: Response) => {
         await productController.insert(req, res);
       })
-      .post(auth.authenticate(), upload.single("image"), async (req: Request, res: Response) => {
+      .post(auth.authenticate(), upload.single('image'), async (req: Request, res: Response) => {
         await productController.update(req, res);
       });
 
@@ -45,11 +45,9 @@ class ProductRouter {
         await productController.delete(req, res);
       });
 
-    this.router
-      .route('/star')
-      .get(auth.authenticate(), async (req: Request, res: Response) => {
-        await productController.getStar(req, res);
-      })
+    this.router.route('/star').get(auth.authenticate(), async (req: Request, res: Response) => {
+      await productController.getStar(req, res);
+    });
   }
 }
 

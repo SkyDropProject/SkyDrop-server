@@ -11,8 +11,8 @@ class OrderMongoDAO extends OrderDAO {
     return new Promise((resolve, reject) => {
       functionsMongo
         .insert(Order, object)
-        .then(() => {
-          resolve(object);
+        .then((res: typeof Order) => {
+          resolve(res);
         })
         .catch((err: any) => {
           reject(err);

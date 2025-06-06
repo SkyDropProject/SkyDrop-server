@@ -21,6 +21,7 @@ app.use(
   })
 );
 const PORT = config.PORT;
+app.use(express.json());
 
 (async () => {
   let bddConnected: boolean = false;

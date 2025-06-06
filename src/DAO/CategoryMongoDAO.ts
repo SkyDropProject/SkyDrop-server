@@ -11,8 +11,8 @@ class CategoryMongoDAO extends CategoryDAO {
     return new Promise((resolve, reject) => {
       functionsMongo
         .insert(Category, object)
-        .then(() => {
-          resolve(object);
+        .then((res: typeof Category) => {
+          resolve(res);
         })
         .catch((err: any) => {
           reject(err);

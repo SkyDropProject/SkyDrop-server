@@ -11,8 +11,8 @@ class ProductMongoDAO extends ProductDAO {
     return new Promise((resolve, reject) => {
       functionsMongo
         .insert(Product, object)
-        .then(() => {
-          resolve(object);
+        .then((res: typeof Product) => {
+          resolve(res);
         })
         .catch((err: any) => {
           reject(err);

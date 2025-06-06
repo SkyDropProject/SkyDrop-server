@@ -24,7 +24,7 @@ class ProductController {
     }
 
     try {
-      let product = await this.factory.insert({
+      const product = await this.factory.insert({
         name: req.body.name,
         imageUrl: !req.file.filename,
         price: req.body.price,
@@ -65,7 +65,7 @@ class ProductController {
           return;
         }
 
-        let product = await this.factory.update(req.body._id, {
+        const product = await this.factory.update(req.body._id, {
           name: req.body.name,
           imageUrl: req.file ? req.file.filename : req.body.imageUrl,
           price: req.body.price,
@@ -98,7 +98,7 @@ class ProductController {
           return;
         }
 
-        let product = await this.factory.delete(req.params._id);
+        const product = await this.factory.delete(req.params._id);
 
         res.json(product);
       });

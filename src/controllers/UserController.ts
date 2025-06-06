@@ -69,6 +69,7 @@ class UserController {
 
   async register(req: Request, res: Response) {
     if (
+      !req.body ||
       !req.body.email ||
       !req.body.password ||
       !req.body.confirmPassword ||
