@@ -1,6 +1,6 @@
 services:
   mongo:
-    image: mongo:4.4
+    image: mongo:latest
     container_name: mongodb_skydrop
     restart: always
     ports:

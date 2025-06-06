@@ -12,7 +12,7 @@ type optsType = {
   jwtFromRequest: any;
 };
 
-let opts: optsType = {
+const opts: optsType = {
   secretOrKey: config.jwtSecret,
   jwtFromRequest: (req: Request) => {
     let token;
@@ -38,7 +38,7 @@ const strategy = new Strategy(opts, (jwt_payload, done) => {
 
 passport.use(strategy);
 
-let auth = {
+const auth = {
   initialize: () => {
     return passport.initialize();
   },
