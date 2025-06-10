@@ -26,7 +26,7 @@ const strategy = new Strategy(opts, (jwt_payload, done) => {
     .findOne(User, { _id: jwt_payload.id })
     .then((res: any) => {
       if (res) {
-        return done(null, res);
+        return done(null, {user:res});
       } else {
         return done(null, false);
       }

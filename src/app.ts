@@ -12,7 +12,7 @@ import { OrderRouter } from './routers/OrderRouter';
 import { CategoryController } from './controllers/CategoryController';
 import { CategoryRouter } from './routers/CategoryRouter';
 import cors from 'cors';
-import RequestIsAdmin from './interfaces/Request';
+import RequestWthUser from './interfaces/Request';
 import { auth } from './utils/auth';
 import { authenticate } from 'passport';
 
@@ -26,9 +26,9 @@ app.use(
 const PORT = config.PORT;
 app.use(express.json());
 
-app.locals.authorizeAdminOnly = (req: RequestIsAdmin, res: Response, next: NextFunction) => {
-  console.log(req.isAdmin);
-  if (req.isAdmin) {
+app.locals.authorizeAdminOnly = (req: RequestWthUser, res: Response, next: NextFunction) => {
+  console.log(req.user.isAdmin);
+  if (req.user.isAdmin) {
     next();
     return;
   }
