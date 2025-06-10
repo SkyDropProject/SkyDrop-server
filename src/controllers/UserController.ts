@@ -12,10 +12,11 @@ class UserController {
     this.factory = factory.createUserDAO();
   }
 
-  generateToken(userId: ObjectId, cb: SignCallback) {
+  generateToken(userId: ObjectId, isAdmin: boolean, cb: SignCallback) {
     const payload = {
       id: userId.toString(),
       iat: Math.floor(Date.now() / 1000),
+      isAdmin: isAdmin,
     };
     jwt.sign(payload, config.jwtSecret, cb);
   }
@@ -48,7 +49,7 @@ class UserController {
             return;
           }
 
-          this.generateToken(user._id, (err, token) => {
+          this.generateToken(user._id, user.isAdmin, (err, token) => {
             if (err) {
               res.sendStatus(500);
               return;
@@ -112,6 +113,7 @@ class UserController {
             const newUser = await this.factory.insert({
               firstName: req.body.firstName,
               lastName: req.body.lastName,
+              isAdmin: false,
               email: email,
               password: hash,
               verificationToken: verificationToken,
@@ -122,7 +124,7 @@ class UserController {
               favoriteProductsId: [],
             });
 
-            this.generateToken(newUser._id, (err, token) => {
+            this.generateToken(newUser._id, newUser.isAdmin, (err, token) => {
               if (err) {
                 res.sendStatus(500);
                 return;

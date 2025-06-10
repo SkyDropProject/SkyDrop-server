@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction, Response } from 'express';
 import { config } from './utils/config';
 import http from 'http';
 import { mongoConnection } from './utils/mongoConnection';
@@ -12,6 +12,7 @@ import { OrderRouter } from './routers/OrderRouter';
 import { CategoryController } from './controllers/CategoryController';
 import { CategoryRouter } from './routers/CategoryRouter';
 import cors from 'cors';
+import RequestIsAdmin from './interfaces/Request';
 
 const app = express();
 app.use(
@@ -22,6 +23,16 @@ app.use(
 );
 const PORT = config.PORT;
 app.use(express.json());
+
+app.locals.authorizeAdminOnly = (req: RequestIsAdmin, res: Response, next: NextFunction) => {
+  console.log(req.isAdmin);
+  if (req.isAdmin) {
+    next();
+    return;
+  }
+
+  res.sendStatus(401);
+};
 
 (async () => {
   let bddConnected: boolean = false;
@@ -42,7 +53,7 @@ app.use(express.json());
   const orderController = new OrderController(factory);
   const categoryController = new CategoryController(factory);
 
-  app.use('/product', new ProductRouter(productController).router);
+  app.use('/product', new ProductRouter(app, productController).router);
   app.use('/user', new UserRouter(userController).router);
   app.use('/order', new OrderRouter(orderController).router);
   app.use('/category', new CategoryRouter(categoryController).router);
