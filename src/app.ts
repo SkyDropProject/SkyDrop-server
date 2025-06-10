@@ -13,6 +13,8 @@ import { CategoryController } from './controllers/CategoryController';
 import { CategoryRouter } from './routers/CategoryRouter';
 import cors from 'cors';
 import RequestIsAdmin from './interfaces/Request';
+import { auth } from './utils/auth';
+import { authenticate } from 'passport';
 
 const app = express();
 app.use(
@@ -57,6 +59,7 @@ app.locals.authorizeAdminOnly = (req: RequestIsAdmin, res: Response, next: NextF
   app.use('/user', new UserRouter(userController).router);
   app.use('/order', new OrderRouter(orderController).router);
   app.use('/category', new CategoryRouter(categoryController).router);
+  app.use('/uploads', auth.authenticate(), express.static('public/uploads'));
 
   const server = http.createServer(app);
   server.setTimeout(24 * 3600 * 1000);

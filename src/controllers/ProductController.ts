@@ -26,7 +26,7 @@ class ProductController {
     try {
       const product = await this.factory.insert({
         name: req.body.name,
-        imageUrl: !req.file.filename,
+        imageUrl: req.file.filename,
         price: req.body.price,
         description: req.body.description,
         stock: req.body.stock,
