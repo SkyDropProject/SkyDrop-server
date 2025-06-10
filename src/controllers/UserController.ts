@@ -13,7 +13,7 @@ class UserController {
   }
 
   generateToken(userId: ObjectId, cb: SignCallback) {
-    let payload = {
+    const payload = {
       id: userId.toString(),
       iat: Math.floor(Date.now() / 1000),
     };
@@ -26,8 +26,8 @@ class UserController {
       return;
     }
 
-    let email = req.body.email.trim();
-    let password = req.body.password.trim();
+    const email = req.body.email.trim();
+    const password = req.body.password.trim();
 
     this.factory
       .findOne({ email: email })
@@ -63,8 +63,6 @@ class UserController {
         res.sendStatus(500);
         return;
       });
-
-    res.sendStatus(200);
   }
 
   async register(req: Request, res: Response) {
@@ -87,8 +85,8 @@ class UserController {
       return;
     }
 
-    let email = req.body.email.trim();
-    let password = req.body.password.trim();
+    const email = req.body.email.trim();
+    const password = req.body.password.trim();
 
     this.factory
       .find({ email: email })
@@ -111,7 +109,7 @@ class UserController {
               return;
             }
 
-            let newUser = await this.factory.insert({
+            const newUser = await this.factory.insert({
               firstName: req.body.firstName,
               lastName: req.body.lastName,
               email: email,
@@ -329,8 +327,8 @@ class UserController {
     this.factory
       .findOne({ _id: req.body._id })
       .then((user: any) => {
-        let cartTmp = [];
-        for (let product of user.cartId) {
+        const cartTmp = [];
+        for (const product of user.cartId) {
           cartTmp.push(product._id);
         }
         cartTmp.push(req.body.productId);
@@ -382,16 +380,16 @@ class UserController {
     this.factory
       .findOne({ _id: req.body._id })
       .then((user: any) => {
-        let product = user.cartId.find((p: any) => p._id === req.body.productId);
+        const product = user.cartId.find((p: any) => p._id === req.body.productId);
         if (!product) {
           res.sendStatus(500);
           return;
         }
 
-        let cartTmp = [];
+        const cartTmp = [];
         let deleted = false;
         for (let i = user.cartId.length - 1; i >= 0; i--) {
-          let product = user.cartId[i];
+          const product = user.cartId[i];
           if (product._id !== req.body.productId || deleted) cartTmp.push(product._id);
           else deleted = true;
         }
@@ -425,8 +423,8 @@ class UserController {
     this.factory
       .findOne({ _id: req.body._id })
       .then((user: any) => {
-        let favoritesTmp = [];
-        for (let product of user.favoriteProductsId) {
+        const favoritesTmp = [];
+        for (const product of user.favoriteProductsId) {
           favoritesTmp.push(product._id);
         }
         favoritesTmp.push(req.body.productId);
@@ -478,14 +476,14 @@ class UserController {
     this.factory
       .findOne({ _id: req.body._id })
       .then((user: any) => {
-        let product = user.favoriteProductsId.find((p: any) => p._id === req.body.productId);
+        const product = user.favoriteProductsId.find((p: any) => p._id === req.body.productId);
         if (!product) {
           res.sendStatus(500);
           return;
         }
 
-        let favoriteTmp = [];
-        for (let product of user.favoriteProductsId) {
+        const favoriteTmp = [];
+        for (const product of user.favoriteProductsId) {
           if (product._id !== req.body.productId) favoriteTmp.push(product._id);
         }
 

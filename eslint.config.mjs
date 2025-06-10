@@ -8,6 +8,7 @@ import { defineConfig } from 'eslint/config';
 export default defineConfig([
   {
     files: ['**/*.{js,cjs,mjs,ts}'],
+    ignores: ['dist/**'],
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: 'module',
