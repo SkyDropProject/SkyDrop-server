@@ -27,8 +27,7 @@ const PORT = config.PORT;
 app.use(express.json());
 
 app.locals.authorizeAdminOnly = (req: RequestWthUser, res: Response, next: NextFunction) => {
-  console.log(req.user.isAdmin);
-  if (req.user.isAdmin) {
+  if (req.user && req.user.isAdmin) {
     next();
     return;
   }
