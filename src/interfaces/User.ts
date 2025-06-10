@@ -17,6 +17,7 @@ interface UserType {
   stripeId?: string;
   favoriteProductsId: Array<string>;
   cartId: Array<string>;
+  isAdmin: boolean;
 }
 
 export { UserType };

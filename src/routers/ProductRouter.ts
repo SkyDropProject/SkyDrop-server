@@ -1,4 +1,4 @@
-import express, { Request, Response, Router } from 'express';
+import express, { Request, Response, Router, Express } from 'express';
 import { auth } from './../utils/auth';
 import { ProductController } from '../controllers/ProductController';
 import multer from 'multer';
@@ -21,7 +21,7 @@ const upload = multer({ storage: storage });
 class ProductRouter {
   public router: Router;
 
-  constructor(productController: ProductController) {
+  constructor(app: Express, productController: ProductController) {
     this.router = express.Router();
 
     this.router
@@ -29,21 +29,35 @@ class ProductRouter {
       .get(auth.authenticate(), async (req: Request, res: Response) => {
         await productController.find(req, res);
       })
-      .put(auth.authenticate(), upload.single('image'), async (req: Request, res: Response) => {
-        await productController.insert(req, res);
-      })
-      .post(auth.authenticate(), upload.single('image'), async (req: Request, res: Response) => {
-        await productController.update(req, res);
-      });
+      .put(
+        auth.authenticate(),
+        app.locals.authorizeAdminOnly,
+        upload.single('image'),
+        async (req: Request, res: Response) => {
+          await productController.insert(req, res);
+        }
+      )
+      .post(
+        auth.authenticate(),
+        app.locals.authorizeAdminOnly,
+        upload.single('image'),
+        async (req: Request, res: Response) => {
+          await productController.update(req, res);
+        }
+      );
 
     this.router
       .route('/:id')
       .get(auth.authenticate(), async (req: Request, res: Response) => {
         await productController.findOne(req, res);
       })
-      .delete(auth.authenticate(), async (req: Request, res: Response) => {
-        await productController.delete(req, res);
-      });
+      .delete(
+        auth.authenticate(),
+        app.locals.authorizeAdminOnly,
+        async (req: Request, res: Response) => {
+          await productController.delete(req, res);
+        }
+      );
 
     this.router.route('/star').get(auth.authenticate(), async (req: Request, res: Response) => {
       await productController.getStar(req, res);

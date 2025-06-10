@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema<UserType>({
       ref: 'Product',
     },
   ],
+  isAdmin: Boolean,
 });
 
 const User = mongoose.model('User', userSchema);
