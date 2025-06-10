@@ -1,7 +1,8 @@
 import { Request } from 'express';
+import { UserType } from './User';
 
-interface RequestIsAdmin extends Request {
-  isAdmin: boolean;
+interface RequestWthUser extends Request {
+  user: UserType;
 }
 
-export default RequestIsAdmin;
+export default RequestWthUser;
