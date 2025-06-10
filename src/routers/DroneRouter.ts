@@ -1,34 +1,34 @@
 import express, { Request, Response, Router, Express } from 'express';
 import { auth } from './../utils/auth';
-import { CategoryController } from '../controllers/CategoryController';
+import { DroneController } from '../controllers/DroneController';
 
-class CategoryRouter {
+class DroneRouter {
   public router: Router;
 
-  constructor(app:Express, categoryController: CategoryController) {
+  constructor(app:Express, droneController: DroneController) {
     this.router = express.Router();
 
     this.router
      .route('/')
       .get(auth.authenticate(), async (req: Request, res: Response) => {
-        await categoryController.find(req, res);
+        await droneController.find(req, res);
       })
       .put(auth.authenticate(), app.locals.authorizeAdminOnly, async (req: Request, res: Response) => {
-        await categoryController.insert(req, res);
+        await droneController.insert(req, res);
       })
       .post(auth.authenticate(), app.locals.authorizeAdminOnly, async (req: Request, res: Response) => {
-        await categoryController.update(req, res);
+        await droneController.update(req, res);
       });
 
     this.router
       .route('/:id')
       .get(auth.authenticate(), async (req: Request, res: Response) => {
-        await categoryController.findOne(req, res);
+        await droneController.findOne(req, res);
       })
       .delete(auth.authenticate(), app.locals.authorizeAdminOnly, async (req: Request, res: Response) => {
-        await categoryController.delete(req, res);
+        await droneController.delete(req, res);
       });
   }
 }
 
-export { CategoryRouter };
+export { DroneRouter };

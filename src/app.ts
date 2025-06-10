@@ -15,6 +15,8 @@ import cors from 'cors';
 import RequestWthUser from './interfaces/Request';
 import { auth } from './utils/auth';
 import { authenticate } from 'passport';
+import { DroneController } from './controllers/DroneController';
+import { DroneRouter } from './routers/DroneRouter';
 
 const app = express();
 app.use(
@@ -53,11 +55,13 @@ app.locals.authorizeAdminOnly = (req: RequestWthUser, res: Response, next: NextF
   const userController = new UserController(factory);
   const orderController = new OrderController(factory);
   const categoryController = new CategoryController(factory);
+  const droneController = new DroneController(factory);
 
   app.use('/product', new ProductRouter(app, productController).router);
   app.use('/user', new UserRouter(userController).router);
   app.use('/order', new OrderRouter(orderController).router);
-  app.use('/category', new CategoryRouter(categoryController).router);
+  app.use('/category', new CategoryRouter(app, categoryController).router);
+  app.use('/drone', new DroneRouter(app, droneController).router);
   app.use('/uploads', auth.authenticate(), express.static('public/uploads'));
 
   const server = http.createServer(app);

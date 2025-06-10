@@ -200,8 +200,8 @@ class UserController {
             city: req.body.city,
             phone: req.body.phone,
           })
-          .then((res: any) => {
-            res.json(res);
+          .then((result: any) => {
+            res.json(result);
           })
           .catch((err: any) => {
             console.log(err);
@@ -273,8 +273,8 @@ class UserController {
       .then(() => {
         this.factory
           .delete(req.body._id)
-          .then((res: any) => {
-            res.json(res);
+          .then((result: any) => {
+            res.json(result);
           })
           .catch((err: any) => {
             console.log(err);
@@ -339,8 +339,8 @@ class UserController {
           .update(user._id, {
             cartId: cartTmp,
           })
-          .then((res: any) => {
-            res.json(res);
+          .then((result: any) => {
+            res.json(result);
           })
           .catch((err: any) => {
             console.log(err);
@@ -400,8 +400,8 @@ class UserController {
           .update(user._id, {
             cartId: cartTmp,
           })
-          .then((res: any) => {
-            res.json(res);
+          .then((result: any) => {
+            res.json(result);
           })
           .catch((err: any) => {
             console.log(err);
@@ -435,8 +435,8 @@ class UserController {
           .update(user._id, {
             favoriteProductsId: favoritesTmp,
           })
-          .then((res: any) => {
-            res.json(res);
+          .then((result: any) => {
+            res.json(result);
           })
           .catch((err: any) => {
             console.log(err);
@@ -493,8 +493,8 @@ class UserController {
           .update(user._id, {
             favoriteProductsId: favoriteTmp,
           })
-          .then((res: any) => {
-            res.json(res);
+          .then((result: any) => {
+            res.json(result);
           })
           .catch((err: any) => {
             console.log(err);
