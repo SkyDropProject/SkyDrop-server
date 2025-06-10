@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 
-class CategoryController {
+class DroneController {
   factory: any;
 
   constructor(factory: any) {
-    this.factory = factory.createCategoryDAO();
+    this.factory = factory.createDroneDAO();
   }
 
   async insert(req: Request, res: Response) {
@@ -16,9 +16,11 @@ class CategoryController {
     this.factory
       .insert({
         name: req.body.name,
+        status:"available",
+        coordinates:{x:0, y:0},
       })
-      .then((category: any) => {
-        res.json(category);
+      .then((drone: any) => {
+        res.json(drone);
       })
       .catch((err: any) => {
         console.log(err);
@@ -28,25 +30,27 @@ class CategoryController {
   }
 
   async update(req: Request, res: Response) {
-    if (!req.body.name || !req.body._id) {
+    if (!req.body.name || !req.body._id || !req.body.status || !req.body.coordinates) {
       res.sendStatus(500);
       return;
     }
 
     this.factory
       .findOne({ _id: req.body._id })
-      .then((category: any) => {
-        if (!category) {
+      .then((drone: any) => {
+        if (!drone) {
           res.sendStatus(500);
           return;
         }
 
         this.factory
-          .update(category._id, {
+          .update(drone._id, {
             name: req.body.name,
+            status: req.body.status,
+            coordinates: req.body.coordinates,
           })
-          .then((categoryUpdated: any) => {
-            res.json(categoryUpdated);
+          .then((droneUpdated: any) => {
+            res.json(droneUpdated);
           })
           .catch((err: any) => {
             console.log(err);
@@ -69,14 +73,14 @@ class CategoryController {
 
     this.factory
       .findOne({ _id: req.params._id })
-      .then((category: any) => {
-        if (!category) {
+      .then((drone: any) => {
+        if (!drone) {
           res.sendStatus(500);
           return;
         }
 
         this.factory
-          .delete(category._id)
+          .delete(drone._id)
           .then((result: any) => {
             res.json(result);
           })
@@ -96,13 +100,13 @@ class CategoryController {
   async find(req: Request, res: Response) {
     this.factory
       .find({})
-      .then((categories: any) => {
-        if (!categories) {
+      .then((drones: any) => {
+        if (!drones) {
           res.sendStatus(500);
           return;
         }
 
-        res.json(categories);
+        res.json(drones);
       })
       .catch((err: any) => {
         console.log(err);
@@ -119,13 +123,13 @@ class CategoryController {
 
     this.factory
       .findOne({ _id: req.params._id })
-      .then((category: any) => {
-        if (!category) {
+      .then((drone: any) => {
+        if (!drone) {
           res.sendStatus(500);
           return;
         }
 
-        res.json(category);
+        res.json(drone);
       })
       .catch((err: any) => {
         console.log(err);
@@ -135,4 +139,4 @@ class CategoryController {
   }
 }
 
-export { CategoryController };
+export { DroneController };
