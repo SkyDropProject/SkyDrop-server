@@ -39,6 +39,10 @@ class UserRouter {
         await userController.verifyAccount(req, res);
       });
 
+    this.router.route('/me').get(auth.authenticate(), async (req: Request, res: Response) => {
+      res.json(req.user);
+    });
+
     this.router
       .route('/cart')
       .get(auth.authenticate(), async (req: Request, res: Response) => {

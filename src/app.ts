@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction, Response } from 'express';
 import { config } from './utils/config';
 import http from 'http';
 import { mongoConnection } from './utils/mongoConnection';
@@ -12,6 +12,11 @@ import { OrderRouter } from './routers/OrderRouter';
 import { CategoryController } from './controllers/CategoryController';
 import { CategoryRouter } from './routers/CategoryRouter';
 import cors from 'cors';
+import RequestWthUser from './interfaces/Request';
+import { auth } from './utils/auth';
+import { authenticate } from 'passport';
+import { DroneController } from './controllers/DroneController';
+import { DroneRouter } from './routers/DroneRouter';
 
 const app = express();
 app.use(
@@ -22,6 +27,15 @@ app.use(
 );
 const PORT = config.PORT;
 app.use(express.json());
+
+app.locals.authorizeAdminOnly = (req: RequestWthUser, res: Response, next: NextFunction) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+    return;
+  }
+
+  res.sendStatus(401);
+};
 
 (async () => {
   let bddConnected: boolean = false;
@@ -41,11 +55,14 @@ app.use(express.json());
   const userController = new UserController(factory);
   const orderController = new OrderController(factory);
   const categoryController = new CategoryController(factory);
+  const droneController = new DroneController(factory);
 
-  app.use('/product', new ProductRouter(productController).router);
+  app.use('/product', new ProductRouter(app, productController).router);
   app.use('/user', new UserRouter(userController).router);
   app.use('/order', new OrderRouter(orderController).router);
-  app.use('/category', new CategoryRouter(categoryController).router);
+  app.use('/category', new CategoryRouter(app, categoryController).router);
+  app.use('/drone', new DroneRouter(app, droneController).router);
+  app.use('/uploads', auth.authenticate(), express.static('public/uploads'));
 
   const server = http.createServer(app);
   server.setTimeout(24 * 3600 * 1000);

@@ -1,0 +1,25 @@
+meta {
+  name: put
+  type: http
+  seq: 1
+}
+
+put {
+  url: http://localhost:3001/drone
+  body: json
+  auth: inherit
+}
+
+params:query {
+  : 
+}
+
+headers {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NDgyMTJiYWQ2ODlkMGE1MjJlNjk5OCIsImlhdCI6MTc0OTU1NzU0NywiaXNBZG1pbiI6ZmFsc2V9.DoAsyina_vEhHZDTKhY4Ye9MPF6qOAq2EkJ5PoqwLME
+}
+
+body:json {
+  {
+    "name":"Avion2Chasse"
+  }
+}
