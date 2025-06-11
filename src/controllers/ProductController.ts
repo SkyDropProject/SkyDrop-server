@@ -86,19 +86,19 @@ class ProductController {
   }
 
   async delete(req: Request, res: Response) {
-    if (!req.params._id) {
+    if (!req.params.id) {
       res.sendStatus(500);
       return;
     }
 
     try {
-      this.factory.findOne({ _id: req.params._id }).then(async (result: any) => {
+      this.factory.findOne({ _id: req.params.id }).then(async (result: any) => {
         if (!result) {
           res.sendStatus(500);
           return;
         }
 
-        const product = await this.factory.delete(req.params._id);
+        const product = await this.factory.delete(req.params.id);
 
         res.json(product);
       });
