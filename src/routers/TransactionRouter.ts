@@ -8,13 +8,19 @@ class TransactionRouter {
   constructor(app: Express, transactionController: TransactionController) {
     this.router = express.Router();
 
-    this.router.route('/').get(auth.authenticate(), async (req: Request, res: Response) => {
+    this.router.route('/').get(async (req: Request, res: Response) => {
       await transactionController.find(req, res);
     });
 
-    this.router.route('/:id').get(auth.authenticate(), async (req: Request, res: Response) => {
-      await transactionController.findOne(req, res);
-    });
+    this.router
+      .route('/:id')
+      .get(
+        auth.authenticate(),
+        app.locals.authorizeAdminOnly,
+        async (req: Request, res: Response) => {
+          await transactionController.findOne(req, res);
+        }
+      );
   }
 }
 
