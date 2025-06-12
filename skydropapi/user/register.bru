@@ -1,0 +1,23 @@
+meta {
+  name: register
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:3001/user/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "email": "bob@gmail.com",
+      "password": "UlysseAChatGPTsurSAswitch",
+      "confirmPassword": "UlysseAChatGPTsurSAswitch",
+      "firstName": "bob",
+      "lastName": "bob",
+      "birthdate": "1053813600",
+      "phone": "0606060606"
+    }
+}
