@@ -1,0 +1,19 @@
+meta {
+  name: GETALL
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:3001/category
+  body: json
+  auth: inherit
+}
+
+headers {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NDgyMTg1NWIzMzIzMDc4YzkzZWQwYiIsImlhdCI6MTc0OTU2MDY3OCwiaXNBZG1pbiI6ZmFsc2V9.-UvDabdBiiB9W-XE39ZMql9hjTuMvkyrHX5HkXu-EBM
+}
+
+body:file {
+  ~file: @file()
+}

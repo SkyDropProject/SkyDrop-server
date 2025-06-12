@@ -66,13 +66,13 @@ class DroneController {
   }
 
   async delete(req: Request, res: Response) {
-    if (!req.params._id) {
+    if (!req.params.id) {
       res.sendStatus(500);
       return;
     }
 
     this.factory
-      .findOne({ _id: req.params._id })
+      .findOne({ _id: req.params.id })
       .then((drone: any) => {
         if (!drone) {
           res.sendStatus(500);
@@ -116,13 +116,13 @@ class DroneController {
   }
 
   async findOne(req: Request, res: Response) {
-    if (!req.params._id) {
+    if (!req.params.id) {
       res.sendStatus(500);
       return;
     }
 
     this.factory
-      .findOne({ _id: req.params._id })
+      .findOne({ _id: req.params.id })
       .then((drone: any) => {
         if (!drone) {
           res.sendStatus(500);
