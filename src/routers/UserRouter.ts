@@ -33,6 +33,10 @@ class UserRouter {
       await userController.login(req, res);
     });
 
+    this.router.route('/admin/login').post(async (req: Request, res: Response) => {
+      await userController.adminLogin(req, res);
+    });
+
     this.router
       .route('/verify-account')
       .post(auth.authenticate(), async (req: Request, res: Response) => {

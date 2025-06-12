@@ -14,7 +14,6 @@ import { CategoryRouter } from './routers/CategoryRouter';
 import cors from 'cors';
 import RequestWthUser from './interfaces/Request';
 import { auth } from './utils/auth';
-import { authenticate } from 'passport';
 import { DroneController } from './controllers/DroneController';
 import { DroneRouter } from './routers/DroneRouter';
 
