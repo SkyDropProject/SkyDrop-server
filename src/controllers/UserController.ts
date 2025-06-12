@@ -371,13 +371,13 @@ class UserController {
   }
 
   async addToCart(req: Request, res: Response) {
-    if (!req.body._id || !req.body.productId) {
+    if (!req.user || !req.body.productId) {
       res.sendStatus(500);
       return;
     }
 
     this.factory
-      .findOne({ _id: req.body._id })
+      .findOne({ _id: (req.user as any)._id })
       .then((user: any) => {
         const cartTmp = [];
         for (const product of user.cartId) {
@@ -406,13 +406,13 @@ class UserController {
   }
 
   async viewCart(req: Request, res: Response) {
-    if (!req.body._id) {
+    if (!req.user) {
       res.sendStatus(500);
       return;
     }
 
     this.factory
-      .findOne({ _id: req.body._id })
+      .findOne({ _id: (req.user as any)._id })
       .then((user: any) => {
         res.json(user.cartId);
       })
@@ -424,26 +424,32 @@ class UserController {
   }
 
   async deleteFromCart(req: Request, res: Response) {
-    if (!req.body._id || !req.body.productId) {
+    if (!req.user || !req.body.productId) {
       res.sendStatus(500);
       return;
     }
 
     this.factory
-      .findOne({ _id: req.body._id })
+      .findOne({ _id: (req.user as any)._id })
       .then((user: any) => {
-        const product = user.cartId.find((p: any) => p._id === req.body.productId);
-        if (!product) {
+        if (!user || !Array.isArray(user.cartId)) {
           res.sendStatus(500);
           return;
         }
+        
+        let removed = false;
+        const cartTmp = user.cartId.filter((item: any) => {
+          const id = item._id ? item._id.toString() : item.toString();
+          if (!removed && id === req.body.productId) {
+            removed = true;
+            return false;
+          }
+          return true;
+        });
 
-        const cartTmp = [];
-        let deleted = false;
-        for (let i = user.cartId.length - 1; i >= 0; i--) {
-          const product = user.cartId[i];
-          if (product._id !== req.body.productId || deleted) cartTmp.push(product._id);
-          else deleted = true;
+        if (removed === false) {
+          res.sendStatus(404);
+          return;
         }
 
         this.factory
