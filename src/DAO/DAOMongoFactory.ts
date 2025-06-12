@@ -3,6 +3,7 @@ import { DAOFactory } from './DAOFactory';
 import { DroneMongoDAO } from './DroneMongoDAO';
 import { OrderMongoDAO } from './OrderMongoDAO';
 import { ProductMongoDAO } from './ProductMongoDAO';
+import { TransactionMongoDAO } from './TransactionMongoDAO';
 import { UserMongoDAO } from './UserMongoDAO';
 
 class DAOMongoFactory extends DAOFactory {
@@ -28,6 +29,10 @@ class DAOMongoFactory extends DAOFactory {
 
   createCategoryDAO(): CategoryMongoDAO {
     return new CategoryMongoDAO();
+  }
+
+  createTransactionDAO(): TransactionMongoDAO {
+    return new TransactionMongoDAO();
   }
 }
 
