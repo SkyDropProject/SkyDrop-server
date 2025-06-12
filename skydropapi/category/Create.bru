@@ -1,0 +1,21 @@
+meta {
+  name: Create
+  type: http
+  seq: 2
+}
+
+put {
+  url: http://localhost:3001/category
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name":"boissons"
+  }
+}
+
+body:multipart-form {
+  name: boissons
+}
