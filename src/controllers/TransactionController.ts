@@ -8,16 +8,16 @@ class TransactionController {
   }
 
   async insert(req: Request, res: Response) {
-    if (!req.body.name) {
+    if (!req.body.slug) {
       res.sendStatus(500);
       return;
     }
 
     this.factory
       .insert({
-        name: req.body.name,
-        status: 'available',
-        coordinates: { x: 0, y: 0 },
+        slug: req.body.slug,
+        user: req.body.user,
+        date: req.body.date || new Date(),
       })
       .then((transaction: any) => {
         res.json(transaction);
