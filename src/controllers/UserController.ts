@@ -66,6 +66,56 @@ class UserController {
       });
   }
 
+  async adminLogin(req: Request, res: Response) {
+    if (!req.body.email || !req.body.password) {
+      res.sendStatus(500);
+      return;
+    }
+
+    const email = req.body.email.trim();
+    const password = req.body.password.trim();
+
+    this.factory
+      .findOne({ email: email })
+      .then((user: any) => {
+        if (!user) {
+          res.sendStatus(500);
+          return;
+        }
+
+        if (!user.isAdmin) {
+          res.sendStatus(401);
+          return;
+        }
+
+        bcrypt.compare(password, user.password, (err, match) => {
+          if (err) {
+            res.sendStatus(500);
+            return;
+          }
+
+          if (!match) {
+            res.sendStatus(401);
+            return;
+          }
+
+          this.generateToken(user._id, user.isAdmin, (err, token) => {
+            if (err) {
+              res.sendStatus(500);
+              return;
+            }
+
+            res.json({ token: token, user: user });
+          });
+        });
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      });
+  }
+
   async register(req: Request, res: Response) {
     if (
       !req.body ||

@@ -16,8 +16,8 @@ class DroneController {
     this.factory
       .insert({
         name: req.body.name,
-        status:"available",
-        coordinates:{x:0, y:0},
+        status: 'available',
+        coordinates: { x: 0, y: 0 },
       })
       .then((drone: any) => {
         res.json(drone);
