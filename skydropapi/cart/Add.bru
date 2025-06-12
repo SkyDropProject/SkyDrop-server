@@ -1,0 +1,18 @@
+meta {
+  name: Add
+  type: http
+  seq: 1
+}
+
+put {
+  url: http://localhost:3001/user/cart
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "productId":"684a7d29fff90effb2772afa"
+  
+  }
+}
