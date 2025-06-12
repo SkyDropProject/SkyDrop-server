@@ -16,6 +16,8 @@ import RequestWthUser from './interfaces/Request';
 import { auth } from './utils/auth';
 import { DroneController } from './controllers/DroneController';
 import { DroneRouter } from './routers/DroneRouter';
+import { TransactionController } from './controllers/TransactionController';
+import { TransactionRouter } from './routers/TransactionRouter';
 
 const app = express();
 app.use(
@@ -55,12 +57,14 @@ app.locals.authorizeAdminOnly = (req: RequestWthUser, res: Response, next: NextF
   const orderController = new OrderController(factory);
   const categoryController = new CategoryController(factory);
   const droneController = new DroneController(factory);
+  const transactionController = new TransactionController(factory);
 
   app.use('/product', new ProductRouter(app, productController).router);
   app.use('/user', new UserRouter(userController).router);
   app.use('/order', new OrderRouter(orderController).router);
   app.use('/category', new CategoryRouter(app, categoryController).router);
   app.use('/drone', new DroneRouter(app, droneController).router);
+  app.use('/transaction', new TransactionRouter(app, transactionController).router);
   app.use('/uploads', auth.authenticate(), express.static('public/uploads'));
 
   const server = http.createServer(app);

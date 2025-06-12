@@ -4,12 +4,16 @@ import uid from 'uid-safe';
 import { Request, Response } from 'express';
 import { config } from '../utils/config';
 import { ObjectId } from 'mongoose';
+import { TransactionService } from '../services/transactionService';
+import { DAOMongoFactory } from '../DAO/DAOMongoFactory';
 
 class UserController {
   factory: any;
+  transactionService: any;
 
   constructor(factory: any) {
     this.factory = factory.createUserDAO();
+    this.transactionService = new TransactionService(new DAOMongoFactory());
   }
 
   generateToken(userId: ObjectId, isAdmin: boolean, cb: SignCallback) {
@@ -49,13 +53,22 @@ class UserController {
             return;
           }
 
-          this.generateToken(user._id, user.isAdmin, (err, token) => {
+          this.generateToken(user._id, user.isAdmin, async (err, token) => {
             if (err) {
               res.sendStatus(500);
               return;
             }
 
-            res.json({ token: token, user: user });
+            try {
+              await this.transactionService.insertTransaction({
+                slug: 'login',
+                user: user._id,
+              });
+            } catch (e) {
+              console.error('Transaction log error:', e);
+            }
+
+            res.json({ token, user });
           });
         });
       })
@@ -174,10 +187,19 @@ class UserController {
               favoriteProductsId: [],
             });
 
-            this.generateToken(newUser._id, newUser.isAdmin, (err, token) => {
+            this.generateToken(newUser._id, newUser.isAdmin, async (err, token) => {
               if (err) {
                 res.sendStatus(500);
                 return;
+              }
+
+              try {
+                await this.transactionService.insertTransaction({
+                  slug: 'register',
+                  user: newUser._id,
+                });
+              } catch (e) {
+                console.error('Transaction log error:', e);
               }
 
               res.json({ token: token, user: newUser });
