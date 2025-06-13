@@ -49,7 +49,7 @@ class OrderMongoDAO extends OrderDAO {
   async find(object: object): Promise<Array<typeof Order>> {
     return new Promise((resolve, reject) => {
       functionsMongo
-        .find(Order, object, null, null)
+        .find(Order, object, [{ path: 'userId' }, { path: 'droneId' }, { path: 'products' }], null)
         .then((res: Array<typeof Order>) => {
           resolve(res);
         })
@@ -62,7 +62,7 @@ class OrderMongoDAO extends OrderDAO {
   async findOne(object: object): Promise<typeof Order> {
     return new Promise((resolve, reject) => {
       functionsMongo
-        .findOne(Order, object)
+        .findOne(Order, object, [{ path: 'userId' }, { path: 'droneId' }, { path: 'products' }])
         .then((res: typeof Order) => {
           resolve(res);
         })

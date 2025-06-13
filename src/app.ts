@@ -12,7 +12,7 @@ import { OrderRouter } from './routers/OrderRouter';
 import { CategoryController } from './controllers/CategoryController';
 import { CategoryRouter } from './routers/CategoryRouter';
 import cors from 'cors';
-import RequestWthUser from './interfaces/Request';
+import RequestWithUser from './interfaces/Request';
 import { auth } from './utils/auth';
 import { DroneController } from './controllers/DroneController';
 import { DroneRouter } from './routers/DroneRouter';
@@ -29,7 +29,7 @@ app.use(
 const PORT = config.PORT;
 app.use(express.json());
 
-app.locals.authorizeAdminOnly = (req: RequestWthUser, res: Response, next: NextFunction) => {
+app.locals.authorizeAdminOnly = (req: RequestWithUser, res: Response, next: NextFunction) => {
   if (req.user && req.user.isAdmin) {
     next();
     return;
