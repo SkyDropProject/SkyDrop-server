@@ -1,7 +1,6 @@
 import express, { Request, Response, Router } from 'express';
 import { auth } from './../utils/auth';
 import { OrderController } from '../controllers/OrderController';
-import RequestWithUser from '../interfaces/Request';
 
 class OrderRouter {
   public router: Router;
@@ -30,11 +29,9 @@ class OrderRouter {
         await orderController.delete(req, res);
       });
 
-    this.router
-      .route('/all')
-      .get(auth.authenticate(), async (req: any, res: Response) => {
-        await orderController.findAll(req, res);
-      })
+    this.router.route('/all').get(auth.authenticate(), async (req: any, res: Response) => {
+      await orderController.findAll(req, res);
+    });
   }
 }
 
