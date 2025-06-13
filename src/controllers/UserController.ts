@@ -377,7 +377,7 @@ class UserController {
     }
 
     this.factory
-      .findOne({ _id: (req.user as any)._id })
+      .findOne(req.user)
       .then((user: any) => {
         const cartTmp = [];
         for (const product of user.cartId) {
@@ -412,7 +412,7 @@ class UserController {
     }
 
     this.factory
-      .findOne({ _id: (req.user as any)._id })
+      .findOne(req.user)
       .then((user: any) => {
         res.json(user.cartId);
       })
@@ -430,13 +430,13 @@ class UserController {
     }
 
     this.factory
-      .findOne({ _id: (req.user as any)._id })
+      .findOne(req.user)
       .then((user: any) => {
         if (!user || !Array.isArray(user.cartId)) {
           res.sendStatus(500);
           return;
         }
-        
+
         let removed = false;
         const cartTmp = user.cartId.filter((item: any) => {
           const id = item._id ? item._id.toString() : item.toString();
