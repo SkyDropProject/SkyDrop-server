@@ -45,6 +45,9 @@ class ProductRouter {
           await productController.update(req, res);
         }
       );
+    this.router.route('/star').get(auth.authenticate(), async (req: Request, res: Response) => {
+      await productController.getStar(req, res);
+    });
 
     this.router
       .route('/:id')
@@ -59,9 +62,7 @@ class ProductRouter {
         }
       );
 
-    this.router.route('/star').get(auth.authenticate(), async (req: Request, res: Response) => {
-      await productController.getStar(req, res);
-    });
+
   }
 }
 

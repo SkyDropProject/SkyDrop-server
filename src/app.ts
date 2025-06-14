@@ -65,7 +65,7 @@ app.locals.authorizeAdminOnly = (req: RequestWthUser, res: Response, next: NextF
   app.use('/category', new CategoryRouter(app, categoryController).router);
   app.use('/drone', new DroneRouter(app, droneController).router);
   app.use('/transaction', new TransactionRouter(app, transactionController).router);
-  app.use('/uploads', auth.authenticate(), express.static('public/uploads'));
+  app.use('/uploads', express.static('public/uploads'));
 
   const server = http.createServer(app);
   server.setTimeout(24 * 3600 * 1000);
