@@ -13,7 +13,6 @@ import { CategoryController } from './controllers/CategoryController';
 import { CategoryRouter } from './routers/CategoryRouter';
 import cors from 'cors';
 import RequestWthUser from './interfaces/Request';
-import { auth } from './utils/auth';
 import { DroneController } from './controllers/DroneController';
 import { DroneRouter } from './routers/DroneRouter';
 import { TransactionController } from './controllers/TransactionController';

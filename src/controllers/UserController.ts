@@ -6,7 +6,6 @@ import { config } from '../utils/config';
 import { ObjectId } from 'mongoose';
 import { TransactionService } from '../services/transactionService';
 import { DAOMongoFactory } from '../DAO/DAOMongoFactory';
-import { ProductType } from '../interfaces/Product';
 import { UserType } from '../interfaces/User';
 
 class UserController {

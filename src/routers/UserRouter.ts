@@ -48,8 +48,8 @@ class UserRouter {
     });
 
     this.router.route('/cart/:id').get(auth.authenticate(), async (req: Request, res: Response) => {
-        await userController.viewCart(req, res);
-      });
+      await userController.viewCart(req, res);
+    });
 
     this.router
       .route('/cart')

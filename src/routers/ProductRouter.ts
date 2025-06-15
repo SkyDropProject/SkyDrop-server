@@ -61,8 +61,6 @@ class ProductRouter {
           await productController.delete(req, res);
         }
       );
-
-
   }
 }
 
