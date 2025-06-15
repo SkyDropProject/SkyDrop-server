@@ -6,6 +6,8 @@ import { config } from '../utils/config';
 import { ObjectId } from 'mongoose';
 import { TransactionService } from '../services/transactionService';
 import { DAOMongoFactory } from '../DAO/DAOMongoFactory';
+import { ProductType } from '../interfaces/Product';
+import { UserType } from '../interfaces/User';
 
 class UserController {
   factory: any;
@@ -428,13 +430,13 @@ class UserController {
   }
 
   async viewCart(req: Request, res: Response) {
-    if (!req.body._id) {
+    if (!req.params.id) {
       res.sendStatus(500);
       return;
     }
 
     this.factory
-      .findOne({ _id: req.body._id })
+      .findOne({ _id: req.params.id })
       .then((user: any) => {
         res.json(user.cartId);
       })
@@ -453,20 +455,14 @@ class UserController {
 
     this.factory
       .findOne({ _id: req.body._id })
-      .then((user: any) => {
-        const product = user.cartId.find((p: any) => p._id === req.body.productId);
-        if (!product) {
+      .then((user: UserType) => {
+        const cartTmp = [...user.cartId];
+        const index = cartTmp.findIndex((p: any) => p.toString() === req.body.productId.toString());
+        if (index === -1) {
           res.sendStatus(500);
           return;
         }
-
-        const cartTmp = [];
-        let deleted = false;
-        for (let i = user.cartId.length - 1; i >= 0; i--) {
-          const product = user.cartId[i];
-          if (product._id !== req.body.productId || deleted) cartTmp.push(product._id);
-          else deleted = true;
-        }
+        cartTmp.splice(index, 1);
 
         this.factory
           .update(user._id, {
@@ -478,13 +474,11 @@ class UserController {
           .catch((err: any) => {
             console.log(err);
             res.sendStatus(500);
-            return;
           });
       })
       .catch((err: any) => {
         console.log(err);
         res.sendStatus(500);
-        return;
       });
   }
 
