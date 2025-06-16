@@ -70,8 +70,6 @@ class OrderController {
 
         res.json(order);
       }
-
-      res.sendStatus(200);
     } catch (err: any) {
       console.log(err);
       res.sendStatus(500);
