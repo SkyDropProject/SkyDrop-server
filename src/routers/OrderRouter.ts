@@ -20,6 +20,9 @@ class OrderRouter {
         await orderController.update(req, res);
       });
 
+    this.router.route('/all').get(auth.authenticate(), async (req: any, res: Response) => {
+      await orderController.findAll(req, res);
+    });
     this.router
       .route('/:id')
       .get(auth.authenticate(), async (req: Request, res: Response) => {
@@ -28,10 +31,6 @@ class OrderRouter {
       .delete(auth.authenticate(), async (req: Request, res: Response) => {
         await orderController.delete(req, res);
       });
-
-    this.router.route('/all').get(auth.authenticate(), async (req: any, res: Response) => {
-      await orderController.findAll(req, res);
-    });
   }
 }
 
