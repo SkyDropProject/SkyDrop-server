@@ -38,6 +38,7 @@ class OrderController {
         });
 
         const productsTmp = [];
+        const productIdsTmp = [];
         for (const product of req.body.products) {
           const p = await this.productFactory.findOne({ id: product._id });
           if (p) {
@@ -45,13 +46,16 @@ class OrderController {
               res.sendStatus(400);
               return;
             } else {
-              const updatedProduct = await this.productFactory.update(p._id, {
-                stock: p.stock - 1,
-              });
-
-              productsTmp.push(updatedProduct._id);
+              productIdsTmp.push({ _id: p.id, stock: p.stock });
             }
           }
+        }
+        for (const p of productIdsTmp) {
+          const updatedProduct = await this.productFactory.update(p._id, {
+            stock: p.stock - 1,
+          });
+
+          productsTmp.push(updatedProduct._id);
         }
 
         const order = await this.factory.insert({
