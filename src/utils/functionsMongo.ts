@@ -74,7 +74,7 @@ functionsMongo.deleteMany = (collection: any, ids: Array<string | null>) => {
 functionsMongo.find = (
   collection: any,
   object: object,
-  populate: string | null = null,
+  populate: string | Array<{ path: string }> | null = null,
   sortObject: string | null = null
 ) => {
   return new Promise((resolve, reject) => {
@@ -93,7 +93,11 @@ functionsMongo.find = (
   });
 };
 
-functionsMongo.findOne = (collection: any, object: object, populate: string | null = null) => {
+functionsMongo.findOne = (
+  collection: any,
+  object: object,
+  populate: string | Array<{ path: string }> | null = null
+) => {
   return new Promise((resolve, reject) => {
     collection
       .findOne(object)
