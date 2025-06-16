@@ -1,14 +1,29 @@
 services:
   mongo:
-    image: mongo:latest
-    container_name: mongodb_skydrop
+    image: mongo:4.4
+    platform: linux/amd64
+    container_name: skydrop-mongodb
     restart: always
     ports:
-      - '27018:27017'
+      - '27017:27017'
     environment:
       MONGO_INITDB_ROOT_USERNAME: skydrop
       MONGO_INITDB_ROOT_PASSWORD: ulysseetchatgptnefontq1
     volumes:
       - mongo-data:/data/db
+  backend:
+    build: .
+    container_name: skydrop-backend
+    restart: unless-stopped
+    ports:
+      - '3001:3001'
+    env_file:
+      - .env.production
+    depends_on:
+      - mongo
+    environment:
+      - NODE_ENV=production
+    profiles:
+      - prod
 volumes:
   mongo-data:

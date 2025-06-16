@@ -1,13 +1,14 @@
 import { configType } from '../types/config';
+import { env } from './env';
 
 const config: configType = {
-  PORT: Number(process.env.PORT) || 3001,
-  mongoPath: process.env.MONGO_URL || 'mongodb://skydrop:ulysseetchatgptnefontq1@127.0.0.1:27018/',
-  jwtSecret: process.env.JWT_SECRET || 'fallback-secret-token-for-dev',
+  PORT: Number(env.PORT),
+  mongoPath: env.MONGO_URL || '',
+  jwtSecret: env.JWT_SECRET || '',
   jwtSession: {
     session: false,
   },
-  saltRounds: 10,
+  saltRounds: Number(env.SALT_ROUNDS),
   uploadPath: 'public/uploads',
 };
 
