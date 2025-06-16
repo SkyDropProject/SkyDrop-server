@@ -1,4 +1,3 @@
-# Étape 1 : build
 FROM node:18 AS builder
 
 WORKDIR /app
@@ -8,7 +7,6 @@ COPY src ./src
 RUN npm install
 RUN npm run build
 
-# Étape 2 : image de prod
 FROM node:18-slim
 
 WORKDIR /app

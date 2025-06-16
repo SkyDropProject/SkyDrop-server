@@ -4,7 +4,7 @@ services:
     container_name: skydrop-mongodb
     restart: always
     ports:
-      - '27018:27017'
+      - '27017:27017'
     environment:
       MONGO_INITDB_ROOT_USERNAME: skydrop
       MONGO_INITDB_ROOT_PASSWORD: ulysseetchatgptnefontq1
