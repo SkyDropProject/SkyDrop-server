@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import RequestWithUser from '../interfaces/Request';
+const { broadcast } = require('../websocket/broadcaster');
 
 class OrderController {
   factory: any;
@@ -20,6 +21,7 @@ class OrderController {
       !req.body.price ||
       !req.body.coordinates
     ) {
+      broadcast({ type: 'notification', message: 'NewOrder' });
       res.sendStatus(500);
       return;
     }
