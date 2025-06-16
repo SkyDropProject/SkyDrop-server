@@ -21,7 +21,8 @@ class OrderController {
       !req.body.price ||
       !req.body.coordinates
     ) {
-      broadcast({ type: 'notification', message: 'NewOrder' });
+      broadcast({ type: 'notification', message: 'orderStarted', data: req.body.coordinates });
+      //TODO: later assign order.droneId with the drone that took the order
       res.sendStatus(500);
       return;
     }
@@ -96,6 +97,14 @@ class OrderController {
         status: req.body.status || order.status,
         droneId: req.body.droneId || order.droneId,
       });
+
+      if (newOrder.status === 'cancelled') {
+        broadcast({ type: 'notification', message: 'orderCancelled' });
+      }
+
+      if (newOrder.status === 'completed') {
+        broadcast({ type: 'notification', message: 'orderCompleted' });
+      }
 
       res.json(newOrder);
     } catch (err: any) {

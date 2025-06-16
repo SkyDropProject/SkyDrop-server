@@ -8,7 +8,7 @@ interface OrderType {
   userId: UserType | string;
   droneId: DroneType | string;
   dateOrder: Date;
-  status: string;
+  status: string; //pending, started, cancelled, completed, there is other status ?
   products: Array<ProductType>;
   deliveryCoordinates: coordinatesType;
   price: number;
