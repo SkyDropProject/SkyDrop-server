@@ -1,6 +1,7 @@
 services:
   mongo:
     image: mongo:4.4
+    platform: linux/amd64
     container_name: skydrop-mongodb
     restart: always
     ports:
@@ -22,5 +23,7 @@ services:
       - mongo
     environment:
       - NODE_ENV=production
+    profiles:
+      - prod
 volumes:
   mongo-data:
