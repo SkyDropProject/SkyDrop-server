@@ -13,7 +13,6 @@ import { CategoryController } from './controllers/CategoryController';
 import { CategoryRouter } from './routers/CategoryRouter';
 import cors from 'cors';
 import RequestWthUser from './interfaces/Request';
-import { auth } from './utils/auth';
 import { DroneController } from './controllers/DroneController';
 import { DroneRouter } from './routers/DroneRouter';
 import { TransactionController } from './controllers/TransactionController';
@@ -65,7 +64,7 @@ app.locals.authorizeAdminOnly = (req: RequestWthUser, res: Response, next: NextF
   app.use('/category', new CategoryRouter(app, categoryController).router);
   app.use('/drone', new DroneRouter(app, droneController).router);
   app.use('/transaction', new TransactionRouter(app, transactionController).router);
-  app.use('/uploads', auth.authenticate(), express.static('public/uploads'));
+  app.use('/uploads', express.static('public/uploads'));
 
   const server = http.createServer(app);
   server.setTimeout(24 * 3600 * 1000);
