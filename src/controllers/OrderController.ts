@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import RequestWithUser from '../interfaces/Request';
+const { broadcast } = require('../websocket/broadcaster');
 
 class OrderController {
   factory: any;
@@ -20,6 +21,8 @@ class OrderController {
       !req.body.price ||
       !req.body.coordinates
     ) {
+      broadcast({ type: 'notification', message: 'created', data: req.body.coordinates });
+      //TODO: later assign order.droneId with the drone that took the order
       res.sendStatus(500);
       return;
     }
@@ -94,6 +97,14 @@ class OrderController {
         status: req.body.status || order.status,
         droneId: req.body.droneId || order.droneId,
       });
+
+      if (newOrder.status === 'cancelled') {
+        broadcast({ type: 'notification', message: 'cancelled' });
+      }
+
+      if (newOrder.status === 'completed') {
+        broadcast({ type: 'notification', message: 'completed' });
+      }
 
       res.json(newOrder);
     } catch (err: any) {

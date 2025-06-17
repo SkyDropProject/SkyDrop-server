@@ -17,6 +17,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development ts-node-dev src/app.ts",
     "start": "cross-env NODE_ENV=production node dist/app.js",
+    "socket": "node src/websocket/index.js",
     "build": "tsc",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write ."
@@ -31,7 +32,8 @@
     "multer": "^2.0.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
-    "uid-safe": "^2.1.5"
+    "uid-safe": "^2.1.5",
+    "ws": "^8.18.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",
