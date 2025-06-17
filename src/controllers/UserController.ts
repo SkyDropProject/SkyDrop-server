@@ -23,7 +23,7 @@ class UserController {
       iat: Math.floor(Date.now() / 1000),
       isAdmin: isAdmin,
     };
-    jwt.sign(payload, config.jwtSecret, cb);
+    jwt.sign(payload, config.jwtSecret, { expiresIn: '1h' }, cb);
   }
 
   async login(req: Request, res: Response) {

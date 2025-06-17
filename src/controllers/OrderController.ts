@@ -40,13 +40,13 @@ class OrderController {
         const productsTmp = [];
         const productIdsTmp = [];
         for (const product of req.body.products) {
-          const p = await this.productFactory.findOne({ id: product._id });
+          const p = await this.productFactory.findOne({ _id: product._id });
           if (p) {
             if (p.stock === 0) {
               res.sendStatus(400);
               return;
             } else {
-              productIdsTmp.push({ _id: p.id, stock: p.stock });
+              productIdsTmp.push({ _id: p._id, stock: p.stock });
             }
           }
         }
@@ -55,7 +55,7 @@ class OrderController {
             stock: p.stock - 1,
           });
 
-          productsTmp.push(updatedProduct._id);
+          productsTmp.push(updatedProduct);
         }
 
         const order = await this.factory.insert({
