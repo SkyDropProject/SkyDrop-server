@@ -1,8 +1,8 @@
-import { Order } from '../models/Order';
+import { Transaction } from '../models/Transaction';
 import { functionsMongo } from '../utils/functionsMongo';
-import { OrderDAO } from './OrderDAO';
+import { TransactionDAO } from './TransactionDAO';
 
-class OrderMongoDAO extends OrderDAO {
+class TransactionMongoDAO extends TransactionDAO {
   constructor() {
     super();
   }
@@ -10,8 +10,8 @@ class OrderMongoDAO extends OrderDAO {
   async insert(object: object): Promise<object> {
     return new Promise((resolve, reject) => {
       functionsMongo
-        .insert(Order, object)
-        .then((res: typeof Order) => {
+        .insert(Transaction, object)
+        .then((res: typeof Transaction) => {
           resolve(res);
         })
         .catch((err: any) => {
@@ -20,11 +20,11 @@ class OrderMongoDAO extends OrderDAO {
     });
   }
 
-  async update(id: string, object: object): Promise<typeof Order> {
+  async update(id: string, object: object): Promise<typeof Transaction> {
     return new Promise((resolve, reject) => {
       functionsMongo
-        .update(Order, id, object)
-        .then((res: typeof Order) => {
+        .update(Transaction, id, object)
+        .then((res: typeof Transaction) => {
           resolve(res);
         })
         .catch((err: any) => {
@@ -36,7 +36,7 @@ class OrderMongoDAO extends OrderDAO {
   async delete(id: string): Promise<object> {
     return new Promise((resolve, reject) => {
       functionsMongo
-        .delete(Order, id)
+        .delete(Transaction, id)
         .then((result: any) => {
           resolve(result);
         })
@@ -46,11 +46,11 @@ class OrderMongoDAO extends OrderDAO {
     });
   }
 
-  async find(object: object): Promise<Array<typeof Order>> {
+  async find(object: object): Promise<Array<typeof Transaction>> {
     return new Promise((resolve, reject) => {
       functionsMongo
-        .find(Order, object, [{ path: 'userId' }, { path: 'droneId' }, { path: 'products' }], null)
-        .then((res: Array<typeof Order>) => {
+        .find(Transaction, object, null, null)
+        .then((res: Array<typeof Transaction>) => {
           resolve(res);
         })
         .catch((err: any) => {
@@ -59,11 +59,11 @@ class OrderMongoDAO extends OrderDAO {
     });
   }
 
-  async findOne(object: object): Promise<typeof Order> {
+  async findOne(object: object): Promise<typeof Transaction> {
     return new Promise((resolve, reject) => {
       functionsMongo
-        .findOne(Order, object, [{ path: 'userId' }, { path: 'droneId' }, { path: 'products' }])
-        .then((res: typeof Order) => {
+        .findOne(Transaction, object)
+        .then((res: typeof Transaction) => {
           resolve(res);
         })
         .catch((err: any) => {
@@ -73,4 +73,4 @@ class OrderMongoDAO extends OrderDAO {
   }
 }
 
-export { OrderMongoDAO };
+export { TransactionMongoDAO };

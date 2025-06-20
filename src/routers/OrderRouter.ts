@@ -10,16 +10,19 @@ class OrderRouter {
 
     this.router
       .route('/')
-      .get(auth.authenticate(), async (req: Request, res: Response) => {
+      .get(auth.authenticate(), async (req: any, res: Response) => {
         await orderController.find(req, res);
       })
-      .put(auth.authenticate(), async (req: Request, res: Response) => {
+      .put(auth.authenticate(), async (req: any, res: Response) => {
         await orderController.insert(req, res);
       })
       .post(auth.authenticate(), async (req: Request, res: Response) => {
         await orderController.update(req, res);
       });
 
+    this.router.route('/all').get(auth.authenticate(), async (req: any, res: Response) => {
+      await orderController.findAll(req, res);
+    });
     this.router
       .route('/:id')
       .get(auth.authenticate(), async (req: Request, res: Response) => {

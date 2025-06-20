@@ -47,11 +47,12 @@ class UserRouter {
       res.json(req.user);
     });
 
+    this.router.route('/cart/:id').get(auth.authenticate(), async (req: Request, res: Response) => {
+      await userController.viewCart(req, res);
+    });
+
     this.router
       .route('/cart')
-      .get(auth.authenticate(), async (req: Request, res: Response) => {
-        await userController.viewCart(req, res);
-      })
       .post(auth.authenticate(), async (req: Request, res: Response) => {
         await userController.deleteFromCart(req, res);
       })

@@ -112,13 +112,13 @@ class CategoryController {
   }
 
   async findOne(req: Request, res: Response) {
-    if (!req.params._id) {
+    if (!req.params.id) {
       res.sendStatus(500);
       return;
     }
 
     this.factory
-      .findOne({ _id: req.params._id })
+      .findOne({ _id: req.params.id })
       .then((category: any) => {
         if (!category) {
           res.sendStatus(500);

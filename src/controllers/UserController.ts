@@ -4,12 +4,17 @@ import uid from 'uid-safe';
 import { Request, Response } from 'express';
 import { config } from '../utils/config';
 import { ObjectId } from 'mongoose';
+import { TransactionService } from '../services/transactionService';
+import { DAOMongoFactory } from '../DAO/DAOMongoFactory';
+import { UserType } from '../interfaces/User';
 
 class UserController {
   factory: any;
+  transactionService: any;
 
   constructor(factory: any) {
     this.factory = factory.createUserDAO();
+    this.transactionService = new TransactionService(new DAOMongoFactory());
   }
 
   generateToken(userId: ObjectId, isAdmin: boolean, cb: SignCallback) {
@@ -18,7 +23,7 @@ class UserController {
       iat: Math.floor(Date.now() / 1000),
       isAdmin: isAdmin,
     };
-    jwt.sign(payload, config.jwtSecret, cb);
+    jwt.sign(payload, config.jwtSecret, { expiresIn: '1h' }, cb);
   }
 
   async login(req: Request, res: Response) {
@@ -49,13 +54,22 @@ class UserController {
             return;
           }
 
-          this.generateToken(user._id, user.isAdmin, (err, token) => {
+          this.generateToken(user._id, user.isAdmin, async (err, token) => {
             if (err) {
               res.sendStatus(500);
               return;
             }
 
-            res.json({ token: token, user: user });
+            try {
+              await this.transactionService.insertTransaction({
+                slug: 'login',
+                user: user._id,
+              });
+            } catch (e) {
+              console.error('Transaction log error:', e);
+            }
+
+            res.json({ token, user });
           });
         });
       })
@@ -174,10 +188,19 @@ class UserController {
               favoriteProductsId: [],
             });
 
-            this.generateToken(newUser._id, newUser.isAdmin, (err, token) => {
+            this.generateToken(newUser._id, newUser.isAdmin, async (err, token) => {
               if (err) {
                 res.sendStatus(500);
                 return;
+              }
+
+              try {
+                await this.transactionService.insertTransaction({
+                  slug: 'register',
+                  user: newUser._id,
+                });
+              } catch (e) {
+                console.error('Transaction log error:', e);
               }
 
               res.json({ token: token, user: newUser });
@@ -353,13 +376,13 @@ class UserController {
   }
 
   async findOne(req: Request, res: Response) {
-    if (!req.params._id) {
+    if (!req.params.id) {
       res.sendStatus(500);
       return;
     }
 
     this.factory
-      .findOne({ _id: req.params._id })
+      .findOne({ _id: req.params.id })
       .then((user: any) => {
         res.json(user);
       })
@@ -462,13 +485,11 @@ class UserController {
           .catch((err: any) => {
             console.log(err);
             res.sendStatus(500);
-            return;
           });
       })
       .catch((err: any) => {
         console.log(err);
         res.sendStatus(500);
-        return;
       });
   }
 
