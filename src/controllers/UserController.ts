@@ -394,13 +394,13 @@ class UserController {
   }
 
   async addToCart(req: Request, res: Response) {
-    if (!req.body._id || !req.body.productId) {
+    if (!req.user || !req.body.productId) {
       res.sendStatus(500);
       return;
     }
 
     this.factory
-      .findOne({ _id: req.body._id })
+      .findOne(req.user)
       .then((user: any) => {
         const cartTmp = [];
         for (const product of user.cartId) {
@@ -429,13 +429,13 @@ class UserController {
   }
 
   async viewCart(req: Request, res: Response) {
-    if (!req.params.id) {
+    if (!req.user) {
       res.sendStatus(500);
       return;
     }
 
     this.factory
-      .findOne({ _id: req.params.id })
+      .findOne(req.user)
       .then((user: any) => {
         res.json(user.cartId);
       })
@@ -447,21 +447,33 @@ class UserController {
   }
 
   async deleteFromCart(req: Request, res: Response) {
-    if (!req.body._id || !req.body.productId) {
+    if (!req.user || !req.body.productId) {
       res.sendStatus(500);
       return;
     }
 
     this.factory
-      .findOne({ _id: req.body._id })
-      .then((user: UserType) => {
-        const cartTmp = [...user.cartId];
-        const index = cartTmp.findIndex((p: any) => p.toString() === req.body.productId.toString());
-        if (index === -1) {
+      .findOne(req.user)
+      .then((user: any) => {
+        if (!user || !Array.isArray(user.cartId)) {
           res.sendStatus(500);
           return;
         }
-        cartTmp.splice(index, 1);
+
+        let removed = false;
+        const cartTmp = user.cartId.filter((item: any) => {
+          const id = item._id ? item._id.toString() : item.toString();
+          if (!removed && id === req.body.productId) {
+            removed = true;
+            return false;
+          }
+          return true;
+        });
+
+        if (removed === false) {
+          res.sendStatus(404);
+          return;
+        }
 
         this.factory
           .update(user._id, {
