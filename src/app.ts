@@ -1,12 +1,13 @@
 import express, { NextFunction, Response } from 'express';
 import { config } from './utils/config';
-import http from 'http';
+import https from 'https';
+import fs from 'fs';
 import { mongoConnection } from './utils/mongoConnection';
 import { DAOMongoFactory } from './DAO/DAOMongoFactory';
 import { ProductController } from './controllers/ProductController';
 import { ProductRouter } from './routers/ProductRouter';
 import { UserController } from './controllers/UserController';
-import { UserRouter } from './routers/UserRouter';
+// import { UserRouter } from './routers/UserRouter';
 import { OrderController } from './controllers/OrderController';
 import { OrderRouter } from './routers/OrderRouter';
 import { CategoryController } from './controllers/CategoryController';
@@ -18,6 +19,7 @@ import { DroneController } from './controllers/DroneController';
 import { DroneRouter } from './routers/DroneRouter';
 import { TransactionController } from './controllers/TransactionController';
 import { TransactionRouter } from './routers/TransactionRouter';
+import { UserRouter } from './routers/UserRouter';
 
 const app = express();
 app.use(
@@ -67,10 +69,15 @@ app.locals.authorizeAdminOnly = (req: RequestWithUser, res: Response, next: Next
   app.use('/transaction', new TransactionRouter(app, transactionController).router);
   app.use('/uploads', express.static('public/uploads'));
 
-  const server = http.createServer(app);
+  const options = {
+    key: fs.readFileSync('./certs/key.pem'),
+    cert: fs.readFileSync('./certs/cert.pem'),
+  };
+
+  const server = https.createServer(options, app);
   server.setTimeout(24 * 3600 * 1000);
-  app.listen(PORT, (err) => {
+  server.listen(PORT, (err?: any) => {
     if (err) console.log(err);
-    console.log('Server listening on PORT', PORT);
+    console.log('HTTPS server listening on PORT', PORT);
   });
 })();
