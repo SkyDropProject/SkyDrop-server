@@ -18,10 +18,7 @@ class OrderController {
   }
 
   async insert(req: RequestWithUser, res: Response) {
-    if (
-      !req.user ||
-      !req.body.coordinates
-    ) {
+    if (!req.user || !req.body.coordinates) {
       broadcast({ type: 'notification', message: 'created', data: req.body.coordinates });
       //TODO: later assign order.droneId with the drone that took the order
       res.sendStatus(500);
@@ -42,7 +39,7 @@ class OrderController {
         });
 
         const productsTmp = [];
-        const productIdsTmp: { _id: any, stock: number, quantity: number }[] = [];
+        const productIdsTmp: { _id: any; stock: number; quantity: number }[] = [];
         let totalPrice = 0;
         let totalWeight = 0;
 
