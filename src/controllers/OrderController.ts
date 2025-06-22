@@ -2,23 +2,24 @@ import { Request, Response } from 'express';
 import RequestWithUser from '../interfaces/Request';
 const { broadcast } = require('../websocket/broadcaster');
 
+const maxWeight = 3; // Maximum weight in kg for an order
+
 class OrderController {
   factory: any;
   droneFactory: any;
   productFactory: any;
+  userFactory: any;
 
   constructor(factory: any) {
     this.factory = factory.createOrderDAO();
     this.droneFactory = factory.createDroneDAO();
     this.productFactory = factory.createProductDAO();
+    this.userFactory = factory.createUserDAO();
   }
 
   async insert(req: RequestWithUser, res: Response) {
     if (
-      !req.body.products ||
-      req.body.products.length === 0 ||
       !req.user ||
-      !req.body.price ||
       !req.body.coordinates
     ) {
       broadcast({ type: 'notification', message: 'created', data: req.body.coordinates });
@@ -41,24 +42,46 @@ class OrderController {
         });
 
         const productsTmp = [];
-        const productIdsTmp = [];
-        for (const product of req.body.products) {
-          const p = await this.productFactory.findOne({ _id: product._id });
+        const productIdsTmp: { _id: any, stock: number, quantity: number }[] = [];
+        let totalPrice = 0;
+        let totalWeight = 0;
+
+        const productCount: { [key: string]: number } = {};
+        for (const productId of req.user.cartId) {
+          productCount[productId] = (productCount[productId] || 0) + 1;
+        }
+
+        for (const productId in productCount) {
+          const p = await this.productFactory.findOne({ _id: productId });
           if (p) {
-            if (p.stock === 0) {
+            if (p.stock < productCount[productId]) {
+              console.error(`Product ${p._id} does not have enough stock`);
               res.sendStatus(400);
               return;
             } else {
-              productIdsTmp.push({ _id: p._id, stock: p.stock });
+              productIdsTmp.push({ _id: p._id, stock: p.stock, quantity: productCount[productId] });
+              totalPrice += p.price * productCount[productId];
+              totalWeight += p.weight * productCount[productId];
             }
           }
         }
+
+        if (totalWeight > maxWeight) {
+          console.error('Order exceeds maximum weight limit');
+          res.sendStatus(400);
+          return;
+        }
+
         for (const p of productIdsTmp) {
           const updatedProduct = await this.productFactory.update(p._id, {
-            stock: p.stock - 1,
+            stock: p.stock - p.quantity,
           });
 
           productsTmp.push(updatedProduct);
+        }
+
+        if (this.userFactory && req.user._id) {
+          await this.userFactory.update(req.user._id, { cartId: [] });
         }
 
         const order = await this.factory.insert({
@@ -68,7 +91,7 @@ class OrderController {
           status: 'created',
           products: productsTmp,
           deliveryCoordinates: req.body.coordinates,
-          price: req.body.price,
+          price: totalPrice,
         });
 
         res.json(order);
