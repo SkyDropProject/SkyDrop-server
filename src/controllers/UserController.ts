@@ -6,7 +6,6 @@ import { config } from '../utils/config';
 import { ObjectId } from 'mongoose';
 import { TransactionService } from '../services/transactionService';
 import { DAOMongoFactory } from '../DAO/DAOMongoFactory';
-import { UserType } from '../interfaces/User';
 
 class UserController {
   factory: any;
@@ -69,7 +68,7 @@ class UserController {
               console.error('Transaction log error:', e);
             }
 
-            res.json({ token, user });
+            res.json({ token, user: { _id: user._id } });
           });
         });
       })
@@ -119,7 +118,7 @@ class UserController {
               return;
             }
 
-            res.json({ token: token, user: user });
+            res.json({ token: token, user: { _id: user._id } });
           });
         });
       })
@@ -203,7 +202,7 @@ class UserController {
                 console.error('Transaction log error:', e);
               }
 
-              res.json({ token: token, user: newUser });
+              res.json({ token: token, user: { _id: newUser._id } });
             });
           });
         });

@@ -1,6 +1,7 @@
 import express, { Request, Response, Router } from 'express';
 import { auth } from './../utils/auth';
 import { UserController } from '../controllers/UserController';
+import RequestWithUser from '../interfaces/Request';
 
 class UserRouter {
   public router: Router;
@@ -44,10 +45,21 @@ class UserRouter {
       });
 
     this.router.route('/me').get(auth.authenticate(), async (req: Request, res: Response) => {
-      res.json(req.user);
+      const { user: reqUser } = req as RequestWithUser;
+      res.json({
+        user: {
+          _id: reqUser._id,
+          fullName:
+            reqUser.firstName.charAt(0).toUpperCase() +
+            reqUser.firstName.slice(1) +
+            ' ' +
+            reqUser.lastName.charAt(0).toUpperCase() +
+            reqUser.lastName.slice(1),
+        },
+      });
     });
 
-    this.router.route('/cart').get(auth.authenticate(), async (req: Request, res: Response) => {
+    this.router.route('/cart/:id').get(auth.authenticate(), async (req: Request, res: Response) => {
       await userController.viewCart(req, res);
     });
 
