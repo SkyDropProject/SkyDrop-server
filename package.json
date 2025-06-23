@@ -1,6 +1,7 @@
 {
   "name": "skydrop-server",
   "version": "1.0.0",
+  "packageManager": "pnpm@10.12.2",
   "description": "",
   "homepage": "https://github.com/SkyDropProject/SkyDrop-server#readme",
   "bugs": {
