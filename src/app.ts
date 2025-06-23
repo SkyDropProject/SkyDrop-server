@@ -13,11 +13,11 @@ import { CategoryController } from './controllers/CategoryController';
 import { CategoryRouter } from './routers/CategoryRouter';
 import cors from 'cors';
 import RequestWithUser from './interfaces/Request';
-import { auth } from './utils/auth';
 import { DroneController } from './controllers/DroneController';
 import { DroneRouter } from './routers/DroneRouter';
 import { TransactionController } from './controllers/TransactionController';
 import { TransactionRouter } from './routers/TransactionRouter';
+import securityMiddleware from './middleware/security';
 
 const app = express();
 app.use(
@@ -27,7 +27,9 @@ app.use(
   })
 );
 const PORT = config.PORT;
+app.use(securityMiddleware);
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.locals.authorizeAdminOnly = (req: RequestWithUser, res: Response, next: NextFunction) => {
   if (req.user && req.user.isAdmin) {
@@ -66,6 +68,14 @@ app.locals.authorizeAdminOnly = (req: RequestWithUser, res: Response, next: Next
   app.use('/drone', new DroneRouter(app, droneController).router);
   app.use('/transaction', new TransactionRouter(app, transactionController).router);
   app.use('/uploads', express.static('public/uploads'));
+
+  app.get('/robots.txt', (req, res) => {
+    res.type('text/plain').send('User-agent: *\nDisallow:');
+  });
+
+  app.get('/sitemap.xml', (req, res) => {
+    res.type('application/xml').send('<?xml version="1.0" encoding="UTF-8"?><urlset></urlset>');
+  });
 
   const server = http.createServer(app);
   server.setTimeout(24 * 3600 * 1000);
