@@ -4,7 +4,7 @@ import { TransactionService } from '../services/transactionService';
 import { DAOMongoFactory } from '../DAO/DAOMongoFactory';
 const { broadcast } = require('../websocket/broadcaster');
 
-const maxWeight = 3;
+const maxWeight = 3000;
 
 class OrderController {
   factory: any;
@@ -66,7 +66,6 @@ class OrderController {
             }
           }
         }
-
         if (totalWeight > maxWeight) {
           console.error('Order exceeds maximum weight limit');
           res.sendStatus(400);
