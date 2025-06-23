@@ -22,7 +22,7 @@ import { TransactionRouter } from './routers/TransactionRouter';
 const app = express();
 app.use(
   cors({
-    origin: ['http://localhost:8081', 'http://localhost:5173'],
+    origin: ['http://localhost:8081', 'http://localhost:5173', 'http://localhost:3004'],
     credentials: true,
   })
 );

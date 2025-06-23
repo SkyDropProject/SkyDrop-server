@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import RequestWithUser from '../interfaces/Request';
 const { broadcast } = require('../websocket/broadcaster');
 
-const maxWeight = 3; // Maximum weight in kg for an order
+const maxWeight = 3;
 
 class OrderController {
   factory: any;
