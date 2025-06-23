@@ -4,15 +4,17 @@ WORKDIR /app
 COPY package*.json tsconfig.json ./
 COPY src ./src
 
-RUN npm install
-RUN npm run build
+RUN npm install -g pnpm
+RUN pnpm install
+RUN pnpm run build
 
 FROM node:18-slim
 
 WORKDIR /app
 
+RUN npm install -g pnpm
 COPY package*.json ./
-RUN npm install --only=production
+RUN pnpm install --prod
 
 COPY --from=builder /app/dist ./dist
 
