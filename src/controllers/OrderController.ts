@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import RequestWithUser from '../interfaces/Request';
+import { TransactionService } from '../services/transactionService';
+import { DAOMongoFactory } from '../DAO/DAOMongoFactory';
 const { broadcast } = require('../websocket/broadcaster');
 
 const maxWeight = 3;
@@ -9,12 +11,14 @@ class OrderController {
   droneFactory: any;
   productFactory: any;
   userFactory: any;
+  transactionService: any;
 
   constructor(factory: any) {
     this.factory = factory.createOrderDAO();
     this.droneFactory = factory.createDroneDAO();
     this.productFactory = factory.createProductDAO();
     this.userFactory = factory.createUserDAO();
+    this.transactionService = new TransactionService(new DAOMongoFactory());
   }
 
   async insert(req: RequestWithUser, res: Response) {
@@ -90,6 +94,15 @@ class OrderController {
           deliveryCoordinates: req.body.coordinates,
           price: totalPrice,
         });
+
+        try {
+          await this.transactionService.insertTransaction({
+            slug: 'createOrder',
+            user: req.user._id,
+          });
+        } catch (e) {
+          console.error('Transaction log error:', e);
+        }
 
         res.json(order);
       }

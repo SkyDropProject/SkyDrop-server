@@ -411,7 +411,15 @@ class UserController {
           .update(user._id, {
             cartId: cartTmp,
           })
-          .then((result: any) => {
+          .then(async (result: any) => {
+            try {
+              await this.transactionService.insertTransaction({
+                slug: 'addProductToCart',
+                user: user._id,
+              });
+            } catch (e) {
+              console.error('Transaction log error:', e);
+            }
             res.json(result);
           })
           .catch((err: any) => {
@@ -478,7 +486,15 @@ class UserController {
           .update(user._id, {
             cartId: cartTmp,
           })
-          .then((result: any) => {
+          .then(async (result: any) => {
+            try {
+              await this.transactionService.insertTransaction({
+                slug: 'removeProductToCart',
+                user: user._id,
+              });
+            } catch (e) {
+              console.error('Transaction log error:', e);
+            }
             res.json(result);
           })
           .catch((err: any) => {
