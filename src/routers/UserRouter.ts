@@ -47,7 +47,7 @@ class UserRouter {
       res.json(req.user);
     });
 
-    this.router.route('/cart/:id').get(auth.authenticate(), async (req: Request, res: Response) => {
+    this.router.route('/cart').get(auth.authenticate(), async (req: Request, res: Response) => {
       await userController.viewCart(req, res);
     });
 
