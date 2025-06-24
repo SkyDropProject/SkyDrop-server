@@ -1,7 +1,7 @@
 jest.mock('../utils/auth', () => ({
   auth: {
-    authenticate: () => (_req: any, _res: any, next: any) => next()
-  }
+    authenticate: () => (_req: any, _res: any, next: any) => next(),
+  },
 }));
 
 import express from 'express';
@@ -19,10 +19,10 @@ import mongoose from 'mongoose';
 
 const mockUser = {
   //_id: new mongoose.Types.ObjectId(),
-  _id: '1234', 
+  _id: '1234',
   email: 'test@example.com',
   password: 'hashedpass',
-  isAdmin: false
+  isAdmin: false,
 };
 
 // Mock de la factory
@@ -48,7 +48,9 @@ describe('UserRouter - login', () => {
   it('should return token and user on valid login', async () => {
     // mock password comparison et jwt
     (bcrypt.compare as jest.Mock).mockImplementation((a, b, cb) => cb(null, true));
-    (jwt.sign as jest.Mock).mockImplementation((_payload, _secret, _opts, cb) => cb(null, 'mocked-jwt-token'));
+    (jwt.sign as jest.Mock).mockImplementation((_payload, _secret, _opts, cb) =>
+      cb(null, 'mocked-jwt-token')
+    );
 
     const response = await request(app)
       .post('/login')

@@ -24,9 +24,10 @@ class OrderRouter {
       await orderController.findAll(req, res);
     });
     this.router
-      .route('/completed/:id').get(auth.authenticate(), async (req: any, res: Response) => {
-      await orderController.completed(req, res);
-    });
+      .route('/completed/:id')
+      .get(auth.authenticate(), async (req: any, res: Response) => {
+        await orderController.completed(req, res);
+      });
     this.router
       .route('/:id')
       .get(auth.authenticate(), async (req: Request, res: Response) => {
