@@ -40,9 +40,7 @@ describe('CategoryRouter', () => {
   });
 
   it('PUT /categories should call controller.insert', async () => {
-    const res = await request(app)
-      .put('/categories')
-      .send({ name: 'New Category' });
+    const res = await request(app).put('/categories').send({ name: 'New Category' });
 
     expect(res.status).toBe(201);
     expect(controller.insert).toHaveBeenCalled();

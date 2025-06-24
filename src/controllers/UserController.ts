@@ -9,10 +9,12 @@ import { DAOMongoFactory } from '../DAO/DAOMongoFactory';
 
 class UserController {
   factory: any;
+  productFactory: any;
   transactionService: any;
 
   constructor(factory: any) {
     this.factory = factory.createUserDAO();
+    this.productFactory = factory.createProductDAO();
     this.transactionService = new TransactionService(new DAOMongoFactory());
   }
 
@@ -400,10 +402,17 @@ class UserController {
 
     this.factory
       .findOne(req.user)
-      .then((user: any) => {
+      .then(async (user: any) => {
         const cartTmp = [];
+        let totalWeight = 0;
         for (const product of user.cartId) {
-          cartTmp.push(product._id);
+          cartTmp.push(product);
+          const p = await this.productFactory.findOne({ _id: product });
+          totalWeight += p.weight;
+          if (totalWeight > config.maxWeight) {
+            res.sendStatus(400);
+            return;
+          }
         }
         cartTmp.push(req.body.productId);
 

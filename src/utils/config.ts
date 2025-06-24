@@ -10,6 +10,7 @@ const config: configType = {
   },
   saltRounds: Number(env.SALT_ROUNDS),
   uploadPath: 'public/uploads',
+  maxWeight: 3000,
 };
 
 export { config };

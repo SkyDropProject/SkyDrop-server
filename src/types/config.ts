@@ -7,6 +7,7 @@ type configType = {
   };
   saltRounds: number;
   uploadPath: string;
+  maxWeight: number;
 };
 
 export { configType };
