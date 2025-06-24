@@ -404,14 +404,14 @@ class UserController {
       .findOne(req.user)
       .then(async (user: any) => {
         const cartTmp = [];
-        let totalWeight = 0
+        let totalWeight = 0;
         for (const product of user.cartId) {
           cartTmp.push(product);
-          const p = await this.productFactory.findOne({_id:product})
-          totalWeight += p.weight
-          if(totalWeight > config.maxWeight){
-            res.sendStatus(400)
-            return
+          const p = await this.productFactory.findOne({ _id: product });
+          totalWeight += p.weight;
+          if (totalWeight > config.maxWeight) {
+            res.sendStatus(400);
+            return;
           }
         }
         cartTmp.push(req.body.productId);

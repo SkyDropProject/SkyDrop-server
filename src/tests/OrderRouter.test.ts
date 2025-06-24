@@ -38,7 +38,7 @@ describe('OrderRouter', () => {
   describe('GET /orders', () => {
     it('should return user orders', async () => {
       const res = await request(app).get('/orders');
-      
+
       expect(res.status).toBe(200);
       expect(controller.find).toHaveBeenCalled();
       expect(res.body).toEqual([{ id: 'order1' }]);
@@ -48,7 +48,7 @@ describe('OrderRouter', () => {
   describe('GET /orders/all', () => {
     it('should return all orders', async () => {
       const res = await request(app).get('/orders/all');
-      
+
       expect(res.status).toBe(200);
       expect(controller.findAll).toHaveBeenCalled();
       expect(res.body).toEqual([{ id: 'order1' }, { id: 'order2' }]);
@@ -60,7 +60,7 @@ describe('OrderRouter', () => {
       const res = await request(app)
         .put('/orders')
         .send({ coordinates: [1, 2] });
-      
+
       expect(res.status).toBe(201);
       expect(controller.insert).toHaveBeenCalled();
       expect(res.body).toEqual({ id: 'newOrder' });
@@ -69,10 +69,8 @@ describe('OrderRouter', () => {
 
   describe('POST /orders', () => {
     it('should update an order', async () => {
-      const res = await request(app)
-        .post('/orders')
-        .send({ _id: 'order123', status: 'completed' });
-      
+      const res = await request(app).post('/orders').send({ _id: 'order123', status: 'completed' });
+
       expect(res.status).toBe(200);
       expect(controller.update).toHaveBeenCalled();
       expect(res.body).toEqual({ id: 'order123' });
@@ -82,7 +80,7 @@ describe('OrderRouter', () => {
   describe('GET /orders/:id', () => {
     it('should return a specific order', async () => {
       const res = await request(app).get('/orders/order123');
-      
+
       expect(res.status).toBe(200);
       expect(controller.findOne).toHaveBeenCalled();
       expect(res.body).toEqual({ id: 'order123' });
@@ -92,7 +90,7 @@ describe('OrderRouter', () => {
   describe('DELETE /orders/:id', () => {
     it('should delete an order', async () => {
       const res = await request(app).delete('/orders/order123');
-      
+
       expect(res.status).toBe(204);
       expect(controller.delete).toHaveBeenCalled();
     });

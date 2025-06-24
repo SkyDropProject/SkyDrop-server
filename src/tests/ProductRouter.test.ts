@@ -25,7 +25,7 @@ jest.mock('multer', () => {
       },
       _removeFile: (req: any, file: any, cb: any) => {
         cb(null);
-      }
+      },
     })),
   };
 });
