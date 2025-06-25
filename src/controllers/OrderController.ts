@@ -22,8 +22,6 @@ class OrderController {
 
   async insert(req: RequestWithUser, res: Response) {
     if (!req.user || !req.body.coordinates) {
-      broadcast({ type: 'notification', message: 'created', data: req.body.coordinates });
-      //TODO: later assign order.droneId with the drone that took the order
       res.sendStatus(500);
       return;
     }
@@ -101,6 +99,9 @@ class OrderController {
         } catch (e) {
           console.error('Transaction log error:', e);
         }
+
+        console.log('Order created:', order, "Broadcasting notification");
+        broadcast({ type: 'notification', message: 'created', data: req.body.coordinates });
 
         res.json(order);
       }
