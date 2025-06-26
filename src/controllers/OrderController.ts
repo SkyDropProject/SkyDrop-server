@@ -100,7 +100,7 @@ class OrderController {
           console.error('Transaction log error:', e);
         }
 
-        console.log('Order created:', order, "Broadcasting notification");
+        console.log('Order created:', order, 'Broadcasting notification');
         broadcast({ type: 'notification', message: 'created', data: req.body.coordinates });
 
         res.json(order);
@@ -226,12 +226,15 @@ class OrderController {
     }
 
     try {
-      let order = await this.factory.findOne(req.params.id);
+      const order = await this.factory.findOne(req.params.id);
       if (!order) {
         res.sendStatus(404);
         return;
       } else {
-        let newOrder = await this.factory.update(req.params.id, {
+        await this.droneFactory.update(order.droneId, {
+          status: 'returning',
+        });
+        const newOrder = await this.factory.update(req.params.id, {
           status: 'completed',
         });
 
