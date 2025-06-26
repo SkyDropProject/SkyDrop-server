@@ -55,6 +55,7 @@ class UserRouter {
             ' ' +
             reqUser.lastName.charAt(0).toUpperCase() +
             reqUser.lastName.slice(1),
+          email: reqUser.email,
         },
       });
     });
