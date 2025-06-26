@@ -226,7 +226,7 @@ class OrderController {
     }
 
     try {
-      const order = await this.factory.findOne(req.params.id);
+      const order = await this.factory.findOne({ _id: req.params.id });
       if (!order) {
         res.sendStatus(404);
         return;
@@ -235,7 +235,7 @@ class OrderController {
           status: 'returning',
         });
         const newOrder = await this.factory.update(req.params.id, {
-          status: 'completed',
+          status: 'finished',
         });
 
         broadcast({ type: 'notification', message: 'completed', data: {} });
