@@ -30,7 +30,7 @@ class DroneController {
   }
 
   async update(req: Request, res: Response) {
-    if (!req.body.name || !req.body._id || !req.body.status || !req.body.coordinates) {
+    if (!req.body._id) {
       res.sendStatus(500);
       return;
     }
