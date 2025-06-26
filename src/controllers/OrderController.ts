@@ -74,7 +74,9 @@ class OrderController {
             stock: p.stock - p.quantity,
           });
 
-          productsTmp.push(updatedProduct);
+          for (let i = 0; i < p.quantity; i++) {
+            productsTmp.push(updatedProduct);
+          }
         }
 
         if (this.userFactory && req.user._id) {
