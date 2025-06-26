@@ -21,6 +21,8 @@ class OrderController {
   }
 
   async insert(req: RequestWithUser, res: Response) {
+
+    console.log('Creating order:', req.body);
     if (!req.user || !req.body.coordinates) {
       res.sendStatus(500);
       return;
@@ -83,13 +85,18 @@ class OrderController {
           await this.userFactory.update(req.user._id, { cartId: [] });
         }
 
+        const newCoords = {
+          x: req.body.coordinates.x || req.body.coordinates.latitude,
+          y: req.body.coordinates.y || req.body.coordinates.longitude,
+        }
+
         const order = await this.factory.insert({
           droneId: drone._id,
           userId: req.user._id,
           dateOrder: now,
           status: 'created',
           products: productsTmp,
-          deliveryCoordinates: req.body.coordinates,
+          deliveryCoordinates: newCoords,
           price: totalPrice,
         });
 

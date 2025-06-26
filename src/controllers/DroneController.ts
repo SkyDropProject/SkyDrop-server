@@ -1,10 +1,14 @@
 import { Request, Response } from 'express';
 
+const originCoords = { x: 44.13, y: 4.1 };
+
 class DroneController {
   factory: any;
+  orderFactory: any;
 
   constructor(factory: any) {
     this.factory = factory.createDroneDAO();
+    this.orderFactory = factory.createOrderDAO();
   }
 
   async insert(req: Request, res: Response) {
@@ -44,11 +48,27 @@ class DroneController {
           return;
         }
 
-        this.factory
+        this.orderFactory.findOne({ droneId: drone._id }).then((order: any) => {
+
+          let newCoords = req.body.coordinates || originCoords;
+
+          if(req.body.completion){
+            // Parse completion percentage (e.g., '99,60779%' -> 99.60779)
+            const completionStr = req.body.completion.replace('%', '').replace(',', '.');
+            const completion = Math.min(Math.max(parseFloat(completionStr), 0), 100) / 100;
+
+            if (order && order.deliveryCoordinates) {
+              newCoords = {
+                x: originCoords.x + (order.deliveryCoordinates.x - originCoords.x) * completion,
+                y: originCoords.y + (order.deliveryCoordinates.y - originCoords.y) * completion,
+              };
+            }
+          }
+          this.factory
           .update(drone._id, {
             name: req.body.name,
             status: req.body.status,
-            coordinates: req.body.coordinates,
+            coordinates: newCoords,
           })
           .then((droneUpdated: any) => {
             res.json(droneUpdated);
@@ -58,6 +78,9 @@ class DroneController {
             res.sendStatus(500);
             return;
           });
+        });
+
+        
       })
       .catch((err: any) => {
         console.log(err);
