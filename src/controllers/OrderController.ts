@@ -101,9 +101,14 @@ class OrderController {
         } catch (e) {
           console.error('Transaction log error:', e);
         }
-
-        console.log('Order created:', order, 'Broadcasting notification');
-        broadcast({ type: 'notification', message: 'created', data: req.body.coordinates });
+        broadcast({ 
+          type: 'notification', 
+          message: 'created', 
+          data: { 
+            coordinates: req.body.coordinates, 
+            droneId: drone._id
+          } 
+        });
 
         res.json(order);
       }

@@ -30,6 +30,7 @@ class DroneController {
   }
 
   async update(req: Request, res: Response) {
+    console.log('Updating drone:', req.body);
     if (!req.body._id) {
       res.sendStatus(500);
       return;

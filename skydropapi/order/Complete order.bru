@@ -1,0 +1,15 @@
+meta {
+  name: Complete order
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:3001/order/completed/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}

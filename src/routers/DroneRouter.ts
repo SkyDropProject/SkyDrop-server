@@ -20,13 +20,9 @@ class DroneRouter {
           await droneController.insert(req, res);
         }
       )
-      .post(
-        auth.authenticate(),
-        app.locals.authorizeAdminOnly,
-        async (req: Request, res: Response) => {
-          await droneController.update(req, res);
-        }
-      );
+      .post(async (req: Request, res: Response) => {
+        await droneController.update(req, res);
+      });
 
     this.router
       .route('/:id')
