@@ -218,6 +218,33 @@ class OrderController {
       return;
     }
   }
+
+  async completed(req: Request, res: Response) {
+    if (!req.params.id) {
+      res.sendStatus(400);
+      return;
+    }
+
+    try {
+      let order = await this.factory.findOne(req.params.id);
+      if (!order) {
+        res.sendStatus(404);
+        return;
+      } else {
+        let newOrder = await this.factory.update(req.params.id, {
+          status: 'completed',
+        });
+
+        broadcast({ type: 'notification', message: 'completed', data: {} });
+
+        res.json(newOrder);
+      }
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+      return;
+    }
+  }
 }
 
 export { OrderController };
